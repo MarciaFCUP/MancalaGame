@@ -1,0 +1,146 @@
+<html lang="pt">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="styling.css" />
+    <link rel="stylesheet" type="text/css" href="stylingOptionGame.css" />
+
+    <script src="login.js"></script>
+    <script src="game.js"></script>
+    <script src="navigation.js"></script>
+    <title>My Mancala Game</title>
+</head>
+
+<body onload="setconf()">
+    <header><b> Mancala Game</b></header>
+    <p><img id=im1 src=" https://nova-escola-producao.s3.amazonaws.com/XC3NN4bjs7mr9dZnC8rK4ZyvXgjmMku4MRx2ePjEnS9Ej2EqGuEuJXjn45GM/nebox-fund1-0002-mancala.jpg" alt="jogo "></p>
+    <!--Create tabs for instrituins, game, results . navigation.js-->
+    <nav>
+        <ul>
+            <li>
+                <a href="#" class="tablinks" onclick="navigateTo(event, 'Presentation')">Mancala</a>
+            </li>
+            <li>
+                <a href="#" class="tablinks" onclick="navigateTo(event, 'Instrutions')">Instruções</a
+          </li>
+           <li>
+           <a href="#" class="tablinks" onclick="navigateTo(event, 'JoinGame')">Jogar Mancala</a>
+            </li>
+            <li>
+                <a href="#" class="tablinks" onclick="navigateTo(event, 'Results')">Resultados</a>
+            </li>
+
+        </ul>
+    </nav>
+    <main>
+        <!-- Tab content -->
+        <div id="Presentation" class="tabcontent">
+            <h3>Comece a jogar Mancala</h3>
+            <iframe src="https://www.youtube.com/embed?v=iSJk6CYsf6c"></iframe>
+        </div>
+        <div id="Instrutions" class="tabcontent">
+            <h3>Instruções do jogo</h3>
+            <div>
+                &nbspO jogo passa-se num tabuleiro com dois conjuntos de cavidades centrais alinhadas e dois armazens, as cavidades maiores. Cada jogador controla as cavidades do seu lado bem como, o armazém à sua direita. As peças denomina-se de sementes.
+                <p><b>Inicio do jogo</p></b>
+                    </b>Os armazéns estão vazios (sem sementes) e as restantes cavidades têm o mesmo número de sementes.
+                    <p><b>Forma de jogar</p></b> Jogadores semeiam as suas sementes alternadamente. Na sua vez semeiam a partir de uma das suas cavidades consoante a situação da última semente semeada, podem voltar a jogar ou ficar com algumas sementes do
+                        adversário. O jogo termina quando um dos jogadores ficar sem sementes.
+                        <p><b>Começar a semear</p></b> Escolher uma cavidade do seu lado (que não o armazém) e recolher todas as N sementes dessa cavidade. Colocar 1 semente nas N cavidade seguintes. A semeadura é feita no sentido anti-horário. Se a cavidade
+                            seguinte for o seu armazém, semear também sobrando sementes, continuar no lado do adversário Se atingir o armazém do adversário, não semear mas depois continuar do seu lado, se ainda tiver sementes. Volta a jogar se a última
+                            semente for semeada for no seu próprio armazém Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar. Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes.
+                            <p><b>Terminar</p></b> Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias. O outro jogador recolhe sementes nas suas cavidades. Ganha jogador cujo armazém tem mais sementes.
+            </div>
+
+        </div>
+
+        <div id="JoinGame" class="tabcontent">
+            <h3>Mancala!</h3>
+            <p>Benvindo ao jogo de Mancala!</p>
+
+            <!--todo Login-->
+            <div class="login hide">
+                <p>Por favor efetue registo para iniciar o jogo:</p>
+                <form action=registar method=post>
+                    Username <input> <br> Password <input type=password>
+                    <input type=submit value=Registar>
+                </form>
+            </div>
+            <div id="gameboard">
+
+
+
+                <h1 id="game-name">Tabuleiro de jogo</h1>
+
+                <!-- 					Print the gameboard:					 -->
+
+                <div class="gameboard-nav">
+                    <div class="dropdown">
+                        <button onclick="showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#" onclick="addContainers(3)">3 Containers</a>
+                            <a href="#" onclick="addContainers(6)">6 Containers</a>
+                            <a href="#" onclick="addContainers(10)">10 Containers</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button onclick="showDropOptionsSeeds()" class="dropbtn">Select Number of seeds</button>
+                        <div id="myDropdownSeeds" class="dropdown-content">
+                            <a href="#" onclick="addSeeds(3)">3 seeds</a>
+                            <a href="#" onclick="addSeeds(6)">6 seeds</a>
+                            <a href="#" onclick="addSeeds(10)">10 seeds</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="text-player">
+                        <h4>Player 1 </h4>
+                    </div>
+                    <div id="board-container">
+
+                        <div class="player1" id="p1">
+                        </div>
+                        <div class="midsection">
+                            <div class="mid1"></div>
+                            <div class="mid2"></div>
+                        </div>
+                        <div class="player2" id="p2">
+                        </div>
+                    </div>
+                    <div class="text-player">
+                        <h4> Player 2</h4>
+                    </div>
+                </div>
+
+                <section class="ResetBtn">
+                    <button id="reset" onclick="resetGame()"> Terminar</button>
+                </section>
+            </div>
+        </div>
+
+        <div id="Results" class="tabcontent">
+            <h3>Classificações</h3>
+            <p>Apresentação dos resultados de cada jogador.</p>
+        </div>
+
+
+        <!--message for winner-->
+        <div>
+
+            <div id="winning-message" class="hide">
+                <p>Would you like to play again?</p>
+                <div class="buttons">
+                    <button class="button yes">Yes</button>
+                    <button class="button no">No</button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    <footer>
+        <nav>@marciaUp201202560 @FCUP @Tecnologias Web</nav>
+    </footer>
+
+</body>
+
+</html>

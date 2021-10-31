@@ -1,0 +1,156 @@
+header {
+    color: rgb(223, 131, 12);
+    font-size: 40pt;
+    position: relative;
+    text-align: center;
+}
+
+html,
+body {
+    height: 100%;
+    padding-bottom: 200px;
+    background-color: floralwhite;
+    padding: 10px;
+}
+
+p {
+    text-align: justify;
+    line-height: 5pt;
+}
+
+.container {
+    margin-top: 40px;
+}
+
+#im1 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    width: 40%;
+    opacity: 0.5;
+}
+
+#board-container {
+    margin: 20px auto;
+    align-content: center;
+    position: relative;
+    display: flex;
+    color: mintcream;
+    height: 40%;
+    width: 98%;
+    margin: 5pt;
+}
+
+#game-name {
+    font-family: 'Poiret One', cursive;
+    color: grey;
+    text-decoration: sienna;
+    text-align: center;
+}
+
+#game-name:hover {
+    color: tomato;
+}
+
+.pot:hover {
+    color: tomato;
+}
+
+
+/*MENU BAR CSS */
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: chocolate;
+}
+
+li {
+    float: left;
+    color: cornsilk;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.active {
+    background-color: darkkhaki;
+}
+
+
+/* not display the discription of each tab*/
+
+.tabcontent {
+    display: none;
+}
+
+
+/* menu bar ends*/
+
+.text-player {
+    text-align: center;
+}
+
+.player1,
+.player2 {
+    color: blue;
+    display: block;
+    flex-grow: 1;
+    border-color: crimson;
+    border-radius: 25px;
+    width: 10%;
+    background-color: violet;
+    border-width: 20px;
+    margin: 1%;
+}
+
+.midsection {
+    border-color: tomato;
+    margin: 1%;
+    color: turquoise;
+    background-color: thistle;
+    border-width: 20px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.mid1,
+.mid2 {
+    width: 100%;
+    height: 50%;
+    border-color: crimson;
+    flex-direction: row;
+    display: flex;
+    width: 100%;
+}
+
+.item {
+    flex-grow: 4;
+    background-color: #ffc;
+    border-radius: 36%;
+    height: 90%;
+    padding: 0px;
+    margin: 5px;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: lightyellow;
+    color: maroon;
+    text-align: center;
+    text-transform: uppercase;
+}
