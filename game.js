@@ -56,7 +56,7 @@ const marbleColors = [
 
 
 // Events =======================================
-
+//event generic
 const distributePlayerRowSeeds = document.addEventListener('click', function(e) {
     if (hasClass(e.target, 'item')) {
         console.log('event', e);
@@ -92,7 +92,7 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
             endGame(items, e, nContainers);
         } else {
             distributePlayer2RowSeeds(limit, startIndex, nContainers);
-            let whoIsNextPlayer = 1;
+
             disableEvents(e.target, nContainers, 'mid2');
             enableEvents(nContainers, 'mid1');
             endGame(items, e, nContainers);
@@ -163,7 +163,6 @@ function endGame(items, nContainers) {
 
     }
 }
-
 
 
 
@@ -324,3 +323,29 @@ function hasClass(elem, className) {
 
 
 // functions =======================================
+
+
+//load entire code on a browser load
+window.onload = function() {
+    //your code
+
+    //assign event to the element
+    //after 'do you like to play again?' start new round
+    document.getElementById("playAgain").addEventListener('click', function(e) {
+        console.log("entrou nomyeeees")
+        let nContainers = document.getElementsByClassName("item");
+        if (hasClass(e.target, 'button-yes')) {
+            var message = document.getElementById("winning-message");
+            console.log("agora msg", message);
+            message.classList.add('hide');
+            enableEvents(nContainers, 'mid1');
+            enableEvents(nContainers, 'mid2');
+            //retirar as seeds
+        }
+
+    });
+
+
+
+
+}

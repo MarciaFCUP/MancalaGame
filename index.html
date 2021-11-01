@@ -28,10 +28,46 @@
             <li>
                 <a href="#" class="tablinks" onclick="navigateTo(event, 'Results')">Resultados</a>
             </li>
-
+            <li class="tablinks">
+                <div class="user-login-message">
+                    <div> <button id="navLogin" class="login-button" onclick="document.getElementById('id01').style.display='block'">Login</button> </div>
+                    <div> <span id="displayUsername"> </span> </div>
+                    <div> <button id="logout" type="button" onclick="logout()" class="cancelbtn">Logout</button> </div>
+                </div>
+            </li>
         </ul>
     </nav>
     <main>
+
+        <!--login-->
+        <div class="login ">
+            <!-- The Modal -->
+            <div id="id01" class="modal">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+                <!-- Modal Content -->
+                <form id="myForm" class="modal-content animate" onsubmit="return false">
+                    <div class="imgcontainer">
+                        <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
+                    </div>
+
+                    <div class="container">
+                        <label for="uname"><b>Username</b></label>
+                        <input type="text" placeholder="Enter Username" name="uname" required>
+
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="psw" required>
+
+                        <button type="button" id="submitLogin" onclick="login()">Login</button>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Tab content -->
         <div id="Presentation" class="tabcontent">
             <h3>Comece a jogar Mancala</h3>
@@ -54,69 +90,63 @@
         </div>
 
         <div id="JoinGame" class="tabcontent">
-            <h3>Mancala!</h3>
-            <p>Benvindo ao jogo de Mancala!</p>
-
-            <!--todo Login-->
-            <div class="login hide">
-                <p>Por favor efetue registo para iniciar o jogo:</p>
-                <form action=registar method=post>
-                    Username <input> <br> Password <input type=password>
-                    <input type=submit value=Registar>
-                </form>
+            <div id="pleaseLogin">
+                <p>Por favor efetue registo para iniciar o jogo</p>
             </div>
-            <div id="gameboard">
+            <div id="displayGame">
+                <h3>Mancala!</h3>
+                <p>Benvindo ao jogo de Mancala!</p>
 
 
 
-                <h1 id="game-name">Tabuleiro de jogo</h1>
+                <div id="gameboard">
+                    <h1 id="game-name">Tabuleiro de jogo</h1>
+                    <!-- 					Print the gameboard:					 -->
 
-                <!-- 					Print the gameboard:					 -->
-
-                <div class="gameboard-nav">
-                    <div class="dropdown">
-                        <button onclick="showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
-                        <div id="myDropdown" class="dropdown-content">
-                            <a href="#" onclick="addContainers(3)">3 Containers</a>
-                            <a href="#" onclick="addContainers(6)">6 Containers</a>
-                            <a href="#" onclick="addContainers(10)">10 Containers</a>
+                    <div class="gameboard-nav">
+                        <div class="dropdown">
+                            <button onclick="showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
+                            <div id="myDropdown" class="dropdown-content">
+                                <a href="#" onclick="addContainers(3)">3 Containers</a>
+                                <a href="#" onclick="addContainers(6)">6 Containers</a>
+                                <a href="#" onclick="addContainers(10)">10 Containers</a>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button onclick="showDropOptionsSeeds()" class="dropbtn">Select Number of seeds</button>
+                            <div id="myDropdownSeeds" class="dropdown-content">
+                                <a href="#" onclick="addSeeds(3)">3 seeds</a>
+                                <a href="#" onclick="addSeeds(6)">6 seeds</a>
+                                <a href="#" onclick="addSeeds(10)">10 seeds</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="dropdown">
-                        <button onclick="showDropOptionsSeeds()" class="dropbtn">Select Number of seeds</button>
-                        <div id="myDropdownSeeds" class="dropdown-content">
-                            <a href="#" onclick="addSeeds(3)">3 seeds</a>
-                            <a href="#" onclick="addSeeds(6)">6 seeds</a>
-                            <a href="#" onclick="addSeeds(10)">10 seeds</a>
+                    <div class="container">
+                        <div class="text-player">
+                            <h4>Player 1 </h4>
+                        </div>
+                        <div id="board-container">
+
+                            <div class="player1" id="p1">
+                            </div>
+                            <div class="midsection">
+                                <div class="mid1"></div>
+                                <div class="mid2"></div>
+                            </div>
+                            <div class="player2" id="p2">
+                            </div>
+                        </div>
+                        <div class="text-player">
+                            <h4> Player 2</h4>
                         </div>
                     </div>
+
+                    <section class="ResetBtn">
+                        <button id="reset" onclick="resetGame()"> Terminar</button>
+                    </section>
                 </div>
-                <div class="container">
-                    <div class="text-player">
-                        <h4>Player 1 </h4>
-                    </div>
-                    <div id="board-container">
-
-                        <div class="player1" id="p1">
-                        </div>
-                        <div class="midsection">
-                            <div class="mid1"></div>
-                            <div class="mid2"></div>
-                        </div>
-                        <div class="player2" id="p2">
-                        </div>
-                    </div>
-                    <div class="text-player">
-                        <h4> Player 2</h4>
-                    </div>
-                </div>
-
-                <section class="ResetBtn">
-                    <button id="reset" onclick="resetGame()"> Terminar</button>
-                </section>
             </div>
         </div>
-
         <div id="Results" class="tabcontent">
             <h3>Classificações</h3>
             <p>Apresentação dos resultados de cada jogador.</p>
@@ -125,15 +155,13 @@
 
         <!--message for winner-->
         <div>
-
             <div id="winning-message" class="hide">
                 <p>Would you like to play again?</p>
                 <div class="buttons">
-                    <button class="button yes">Yes</button>
-                    <button class="button no">No</button>
+                    <button id="playAgain" class="button-yes">Yes</button>
+                    <button class="button-no">No</button>
                 </div>
             </div>
-
         </div>
 
     </main>
