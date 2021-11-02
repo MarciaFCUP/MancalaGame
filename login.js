@@ -40,31 +40,40 @@ window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
+
+
 }
 
 // Cookie functions =======================================
 function getCookie(name) {
     console.log('call getCookie ', name)
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+    console.log('call getCookie result', result)
+    result && (result = JSON.parse(result[1]));
+    return result;
+
 }
 
 function setCookie(username, psw) {
+    let user = {
+        username: username,
+        password: encodeURI(psw)
+    };
 
     today = new Date();
     var expire = new Date();
     expire.setTime(today.getTime() + 3600000 * 24 * 15);
-    document.cookie = "username=" + username + ";path=/" + ";expires=" + expire.toUTCString();
-    document.cookie = "password=" + encodeURI(psw) + ";path=/" + ";expires=" + expire.toUTCString();
+    var cookie = "userSession=" + JSON.stringify(user) + ";path=/" + ";expires=" + expire.toUTCString();
+    console.log('cookie', cookie)
+    document.cookie = cookie;
 }
 
 function checkLoginCookie() {
-    let user = getCookie("username");
+    let user = getCookie('userSession');
     console.log('user', user)
     if (user != undefined && user != "") {
         var displayUsername = document.getElementById('displayUsername');
-        displayUsername.innerHTML = "Welcome " + user + "!";
+        displayUsername.innerHTML = "Welcome " + user.username + "!";
         document.getElementById('navLogin').style.display = 'none';
         document.getElementById('pleaseLogin').style.display = 'none';
         document.getElementById('logout').style.display = 'block';
@@ -83,8 +92,7 @@ function deleteCookie(name) {
 }
 
 function logout() {
-    deleteCookie("username");
-    deleteCookie("password");
+    deleteCookie("userSession");
     document.getElementById('pleaseLogin').style.display = 'block';
     window.location.reload(false);
 
