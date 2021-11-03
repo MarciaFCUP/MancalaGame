@@ -1,3 +1,5 @@
+import { cookie } from "./login.js";
+
 function showDropOptions() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -18,17 +20,26 @@ window.onclick = function(event) {
         }
     }
 }
-
+let game = {
+    showDropOptions: showDropOptions,
+    showDropOptionsSeeds: showDropOptionsSeeds,
+    addContainers: addContainers,
+    addSeeds: addSeeds
+}
+export {
+    game
+}
+//add object game to window so it can be used on the html to call the onclick methods
+window.game = game;
 
 // Global letiables =======================================
 
-
-
-// Player 1 total marbles
-let player1Seeds = null;
-
-// Player 2 total marbles
+//verify who is a winner
+let whoIsWinner = null;
+// Player  total seeds
 let player2Seeds = null;
+//identify players
+let whoIsNextPlayer = 0;
 
 // Tracks the current player's turn
 let currentPlayer = null;
@@ -38,7 +49,6 @@ let numSeeds = null;
 
 // Tracks the location of the hole where marbles were grabbed
 let startIndex = null;
-
 
 
 
@@ -67,7 +77,7 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
 
         let numSeeds = e.target.children.length;
         let items = Array.from(nContainers);
-        let filterItem = items.filter(x => x.id == e.target.id); //creats new array with target
+        let filterItem = items.filter(x => x.id == e.target.id); //creats new array with target only id
         console.log('Nitems', items);
         let item = filterItem[0];
 
@@ -138,6 +148,7 @@ function endGame(items, nContainers) {
 
         disableEvents(items[items.length - 1], nContainers, 'mid2');
         disableEvents(items[0], nContainers, 'mid1');
+        compareNumSeeds();
         var message = document.getElementById("winning-message"); //.style.visibility = 'visible';
         message.classList.remove('hide');
 
@@ -158,13 +169,51 @@ function endGame(items, nContainers) {
         }
         disableEvents(items[items.length - 1], nContainers, 'mid2');
         disableEvents(items[0], nContainers, 'mid1');
+        compareNumSeeds()
         var message = document.getElementById("winning-message"); //.style.visibility = 'visible';
         message.classList.remove('hide');
 
     }
+
+
+    // compare number seeds in each player
+    function compareNumSeeds() {
+
+        let seedsP1 = document.getElementById("p1").children.length;
+        let seedsP2 = document.getElementById("p2").children.length;
+        console.log("seedsP1", seedsP1);
+
+        saveScore('Player 1', seedsP1)
+        saveScore('Player 2', seedsP2)
+
+        if (seedsP1 > seedsP2) {
+            whoIsWinner = 1;
+            document.getElementById('winning-message').innerHTML += '<br>You are the winner!<br>';
+        } else {
+            whoIsWinner = 2;
+            document.getElementById('winning-message').innerHTML += '<br>You lose!<br>';
+        }
+        //clean board
+        resetGame();
+
+    }
 }
 
+function saveScore(name, value) {
 
+    var score = {
+        displayName: name,
+        score: value
+    };
+
+    var scores = cookie.getCookie('scores');
+    if (scores == null) {
+        scores = []
+    }
+    scores.push(score);
+    addDataToSocreboard(scores)
+    cookie.setCookie('scores', scores)
+}
 
 
 
@@ -205,8 +254,8 @@ function distributePlayer1RowSeeds(limit, startIndex, nContainers) {
         }
         //put a seed in your container
         if (index < 0) {
-
             let player1 = document.getElementById("p1");
+
             player1.innerHTML += '<span class="dot"></span>';
             flagMid1 = 0;
             flagMid2 = 1;
@@ -283,7 +332,7 @@ function addContainers(numberOfContainers) {
     player2.innerHTML = '';
 
     //append items
-    for (i = 0; i < numberOfContainers; i++) {
+    for (let i = 0; i < numberOfContainers; i++) {
         mid1[0].innerHTML += '<div id="' + i + '" class="mid1 item"> </div>';
         mid2[0].innerHTML += '<div id="' + (numberOfContainers + i) + '" class=" mid2 item"> </div>'
     }
@@ -329,6 +378,13 @@ function hasClass(elem, className) {
 window.onload = function() {
     //your code
 
+    let scores = cookie.getCookie('scores');
+    console.log('scores', scores);
+    if (scores) {
+        addDataToSocreboard(scores);
+    }
+
+
     //assign event to the element
     //after 'do you like to play again?' start new round
     document.getElementById("playAgain").addEventListener('click', function(e) {
@@ -346,6 +402,22 @@ window.onload = function() {
     });
 
 
+}
 
 
+//addDataToSocreboard(JSON.parse(response));
+
+function addDataToSocreboard(scores) {
+
+    var tbody = document.getElementById("tbody")
+    for (var i = 0; i < scores.length; i++) {
+
+        var tr = document.createElement('tr');
+        var td = "<td>" + (i + 1) + "</td>" +
+            "<td><img class='avatar2' src='https://www.w3schools.com/howto/img_avatar2.png'/>" +
+            scores[i].displayName + "</td>" +
+            "<td>" + scores[i].score + "</td>";
+        tr.innerHTML = td;
+        tbody.appendChild(tr)
+    }
 }

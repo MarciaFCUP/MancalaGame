@@ -13,6 +13,10 @@ body {
     padding: 10px;
 }
 
+main {
+    height: 100%;
+}
+
 p {
     text-align: justify;
     line-height: 5pt;

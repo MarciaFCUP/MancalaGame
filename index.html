@@ -2,11 +2,13 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="styling.css" />
-    <link rel="stylesheet" type="text/css" href="stylingOptionGame.css" />
+    <link rel="stylesheet" type="text/css" href="gameSection.css" />
+    <link rel="stylesheet" type="text/css" href="scoreSection.css" />
 
-    <script src="login.js"></script>
-    <script src="game.js"></script>
     <script src="navigation.js"></script>
+    <script type="module" src="login.js"></script>
+    <script type="module" src="game.js"></script>
+
     <title>My Mancala Game</title>
 </head>
 
@@ -32,7 +34,7 @@
                 <div class="user-login-message">
                     <div> <button id="navLogin" class="login-button" onclick="document.getElementById('id01').style.display='block'">Login</button> </div>
                     <div> <span id="displayUsername"> </span> </div>
-                    <div> <button id="logout" type="button" onclick="logout()" class="cancelbtn">Logout</button> </div>
+                    <div> <button id="logout" type="button" onclick="login.logout()" class="cancelbtn">Logout</button> </div>
                 </div>
             </li>
         </ul>
@@ -58,7 +60,7 @@
                         <label for="psw"><b>Password</b></label>
                         <input type="password" placeholder="Enter Password" name="psw" required>
 
-                        <button type="button" id="submitLogin" onclick="login()">Login</button>
+                        <button type="button" id="submitLogin" onclick="login.login()">Login</button>
                     </div>
 
                     <div class="container" style="background-color:#f1f1f1">
@@ -105,19 +107,19 @@
 
                     <div class="gameboard-nav">
                         <div class="dropdown">
-                            <button onclick="showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
+                            <button onclick="game.showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
                             <div id="myDropdown" class="dropdown-content">
-                                <a href="#" onclick="addContainers(3)">3 Containers</a>
-                                <a href="#" onclick="addContainers(6)">6 Containers</a>
-                                <a href="#" onclick="addContainers(10)">10 Containers</a>
+                                <a href="#" onclick="game.addContainers(3)">3 Containers</a>
+                                <a href="#" onclick="game.addContainers(6)">6 Containers</a>
+                                <a href="#" onclick="game.addContainers(10)">10 Containers</a>
                             </div>
                         </div>
                         <div class="dropdown">
-                            <button onclick="showDropOptionsSeeds()" class="dropbtn">Select Number of seeds</button>
+                            <button onclick="game.showDropOptionsSeeds()" class="dropbtn">Select Number of seeds</button>
                             <div id="myDropdownSeeds" class="dropdown-content">
-                                <a href="#" onclick="addSeeds(3)">3 seeds</a>
-                                <a href="#" onclick="addSeeds(6)">6 seeds</a>
-                                <a href="#" onclick="addSeeds(10)">10 seeds</a>
+                                <a href="#" onclick="game.addSeeds(3)">3 seeds</a>
+                                <a href="#" onclick="game.addSeeds(6)">6 seeds</a>
+                                <a href="#" onclick="game.addSeeds(10)">10 seeds</a>
                             </div>
                         </div>
                     </div>
@@ -150,6 +152,17 @@
         <div id="Results" class="tabcontent">
             <h3>Classificações</h3>
             <p>Apresentação dos resultados de cada jogador.</p>
+            <table id="socreboard" class="table striped">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
         </div>
 
 

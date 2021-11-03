@@ -24,7 +24,7 @@ function login(event) {
 
     console.log('retrieved: ', retrieved);
     if (retrieved.uname != "" && retrieved.psw != "") {
-        setCookie(retrieved.uname, retrieved.psw);
+        setLoginCookie(retrieved.uname, retrieved.psw);
         document.getElementById('navLogin').style.display = 'none';
         checkLoginCookie();
         document.getElementById('id01').style.display = 'none';
@@ -54,16 +54,21 @@ function getCookie(name) {
 
 }
 
-function setCookie(username, psw) {
+
+function setLoginCookie(username, psw) {
     let user = {
         username: username,
         password: encodeURI(psw)
     };
 
-    today = new Date();
+    setCookie('userSession', user)
+}
+
+function setCookie(name, value) {
+    var today = new Date();
     var expire = new Date();
     expire.setTime(today.getTime() + 3600000 * 24 * 15);
-    var cookie = "userSession=" + JSON.stringify(user) + ";path=/" + ";expires=" + expire.toUTCString();
+    var cookie = name + "=" + JSON.stringify(value) + ";path=/" + ";expires=" + expire.toUTCString();
     console.log('cookie', cookie)
     document.cookie = cookie;
 }
@@ -92,10 +97,32 @@ function deleteCookie(name) {
 }
 
 function logout() {
-    deleteCookie("userSession");
+    deleteCookie('userSession');
+    deleteCookie('scores');
     document.getElementById('pleaseLogin').style.display = 'block';
     window.location.reload(false);
 
 }
 
 //End Cookie functions =======================================
+
+
+//Export functions =======================================
+// we define an object to export so we can call it like cookie.getCookie('name', value)
+const cookie = {
+    setCookie: setCookie,
+    getCookie: getCookie,
+    deleteCookie: deleteCookie
+}
+
+const login = {
+    logout: logout,
+    login: login
+}
+
+export {
+    cookie
+};
+
+window.login = login;
+//End Export functions =======================================
