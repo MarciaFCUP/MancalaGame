@@ -10,7 +10,7 @@
     }, 10);
 })(window, document);
 
-function login(event) {
+function loginFuntion(event) {
 
     let myForm = document.getElementById('myForm');
     let data = new FormData(myForm);
@@ -61,7 +61,7 @@ function setLoginCookie(username, psw) {
         password: encodeURI(psw)
     };
 
-    setCookie('userSession', user)
+    setCookie('userSession', user);
 }
 
 function setCookie(name, value) {
@@ -117,7 +117,7 @@ const cookie = {
 
 const login = {
     logout: logout,
-    login: login
+    login: loginFuntion
 }
 
 export {

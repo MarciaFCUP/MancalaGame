@@ -21,6 +21,6 @@ function navigateTo(evt, tabName) {
 
 function setconf() {
 
-    document.getElementById("Presentation").style.visibility = "visible";
+    document.getElementById("Presentation").style.display = "visible";
 
 }

@@ -20,17 +20,7 @@ window.onclick = function(event) {
         }
     }
 }
-let game = {
-    showDropOptions: showDropOptions,
-    showDropOptionsSeeds: showDropOptionsSeeds,
-    addContainers: addContainers,
-    addSeeds: addSeeds
-}
-export {
-    game
-}
-//add object game to window so it can be used on the html to call the onclick methods
-window.game = game;
+
 
 // Global letiables =======================================
 
@@ -52,7 +42,7 @@ let startIndex = null;
 
 
 
-// Pre-canned marble colors
+// Pre-canned marble colors could be useful for seeds?
 const marbleColors = [
     ['#e54ed0, #ff72ff'],
     ['#b106df, #06dfb1'],
@@ -210,7 +200,7 @@ function saveScore(name, value) {
     if (scores == null) {
         scores = []
     }
-    scores.push(score);
+    scores.push(score); //append new element
     addDataToSocreboard(scores)
     cookie.setCookie('scores', scores)
 }
@@ -374,7 +364,7 @@ function hasClass(elem, className) {
 // functions =======================================
 
 
-//load entire code on a browser load
+//load  code on a browser load
 window.onload = function() {
     //your code
 
@@ -385,22 +375,18 @@ window.onload = function() {
     }
 
 
-    //assign event to the element
-    //after 'do you like to play again?' start new round
-    document.getElementById("playAgain").addEventListener('click', function(e) {
-        console.log("entrou nomyeeees")
-        let nContainers = document.getElementsByClassName("item");
-        if (hasClass(e.target, 'button-yes')) {
-            var message = document.getElementById("winning-message");
-            console.log("agora msg", message);
-            message.classList.add('hide');
-            enableEvents(nContainers, 'mid1');
-            enableEvents(nContainers, 'mid2');
-            //retirar as seeds
-        }
 
-    });
+}
 
+//after 'do you like to play again?' start new round
+function playAgain() {
+
+    let nContainers = document.getElementsByClassName("item");
+    var message = document.getElementById("winning-message");
+    console.log("agora msg", message);
+    message.classList.add('hide');
+    enableEvents(nContainers, 'mid1');
+    enableEvents(nContainers, 'mid2');
 
 }
 
@@ -421,3 +407,19 @@ function addDataToSocreboard(scores) {
         tbody.appendChild(tr)
     }
 }
+
+
+let game = {
+    showDropOptions: showDropOptions,
+    showDropOptionsSeeds: showDropOptionsSeeds,
+    addContainers: addContainers,
+    addSeeds: addSeeds,
+    playAgain: playAgain,
+    resetGame: resetGame
+}
+export {
+    game
+}
+
+//add object game to window so it can be used on the html to call the onclick methods
+window.game = game;
