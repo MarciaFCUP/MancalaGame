@@ -1,5 +1,7 @@
 import { cookie } from "./login.js";
 
+
+
 function showDropOptions() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -8,6 +10,14 @@ function showDropOptionsSeeds() {
     document.getElementById("myDropdownSeeds").classList.toggle("show");
 }
 
+
+function showDropOptionsPlayer() {
+    document.getElementById("myDropPlayFirst").classList.toggle("show");
+}
+
+function showDropOptionsAgainst() {
+    document.getElementById("myDropPlayAgainst").classList.toggle("show");
+}
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
@@ -23,7 +33,8 @@ window.onclick = function(event) {
 
 
 // Global letiables =======================================
-
+//creat array for the board game
+var board = [];
 //verify who is a winner
 let whoIsWinner = null;
 // Player  total seeds
@@ -109,6 +120,85 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
 
 // functions =======================================
 
+//funtion to update board with an array
+function updateBoard(board, nContainers) {
+    let ncontainers = document.getElementsByClassName("item");
+    let size = 0;
+
+    for (let i = 0; i < nContainers.length; i++) {
+        let curr = nContainers[i];
+        curr.innerHTML = '';
+        for (let j = 0; j < board[i]; j++) {
+            curr.innerHTML += '<span class="dot"></span>';
+        }
+        size = i;
+    }
+
+    //update player1 position nContainers.length
+    let player1 = document.getElementById("p1");
+    player1.innerHTML = '';
+    size++;
+    for (let j = 0; j < board[size]; j++) {
+
+        player1.innerHTML += '<span class="dot"></span>';
+    }
+    //update player2 position nContainers.length+1
+    let player2 = document.getElementById('p2');
+    player2.innerHTML = '';
+    size++;
+    for (let j = 0; j < board[size]; j++) {
+
+        player2.innerHTML += '<span class="dot"></span>';
+    }
+
+}
+
+
+function verifylLastSeed(lastSeed, player, nContainers) {
+    console.log("lastSeed", lastSeed);
+    let player1pos = nContainers.length;
+    let player2pos = nContainers.length + 1;
+    let opposed = null; //opposed postion
+    let midSection = 0;
+
+    //verify if lastseed  position is in a empty container of the player==only 1 child
+    if (lastSeed >= 0 && lastSeed < nContainers.length) {
+        let size = board[lastSeed];
+
+        //in witch midsection is lastSeed
+        if (lastSeed < nContainers.length / 2) {
+            midSection = 1;
+        }
+        if (lastSeed >= nContainers.length / 2) {
+            midSection = 2;
+        }
+        console.log("verify lasteseed, player, midsection, size", lastSeed, player, midSection, size);
+        if (size == 1 && midSection == player) {
+
+            if (player == 1) {
+                opposed = lastSeed + (nContainers.length / 2);
+                board[player1pos] += board[opposed] + 1;
+                board[lastSeed] = 0;
+                board[opposed] = 0;
+
+            }
+
+
+            if (player == 2) {
+                opposed = lastSeed - (nContainers.length / 2);
+                board[player2pos] += board[opposed] + 1;
+                board[lastSeed] = 0;
+                board[opposed] = 0;
+
+            }
+
+        }
+
+    }
+
+
+}
+
 //verify who is the winner
 function endGame(items, nContainers) {
     let mid1Size = 0;
@@ -171,38 +261,52 @@ function endGame(items, nContainers) {
 
         let seedsP1 = document.getElementById("p1").children.length;
         let seedsP2 = document.getElementById("p2").children.length;
-        console.log("seedsP1", seedsP1);
 
-        saveScore('Player 1', seedsP1)
-        saveScore('Player 2', seedsP2)
+        console.log("seedsP1", seedsP1);
 
         if (seedsP1 > seedsP2) {
             whoIsWinner = 1;
-            document.getElementById('winning-message').innerHTML += '<br>You are the winner!<br>';
+            document.getElementById('idWinner').innerHTML = '<br>You are the winner!<br>';
         } else {
             whoIsWinner = 2;
-            document.getElementById('winning-message').innerHTML += '<br>You lose!<br>';
+            document.getElementById('idWinner').innerHTML = '<br>You loose!<br>';
         }
         //clean board
         resetGame();
-
+        //CONFIRMAR
+        let player = cookie.getCookie('userSession');
+        console.log(player);
+        saveScore(player.username, seedsP1);
     }
 }
 
 function saveScore(name, value) {
 
+    let flag = 0;
+    var scores = cookie.getCookie('scores'); //returns an array
+    if (scores == null) {
+        scores = []
+    }
     var score = {
         displayName: name,
         score: value
     };
 
-    var scores = cookie.getCookie('scores');
-    if (scores == null) {
-        scores = []
+    for (let i = 0; i < scores.length; i++) {
+        if (scores[i].displayName == name) {
+            //update cookie
+            scores[i].value += value;
+            flag = 1;
+        }
     }
-    scores.push(score); //append new element
-    addDataToSocreboard(scores)
-    cookie.setCookie('scores', scores)
+
+    if (flag == 0) {
+        scores.push(score); //append new element
+
+    }
+    cookie.setCookie('scores', scores);
+    addDataToScoreboard(scores);
+
 }
 
 
@@ -229,37 +333,45 @@ function enableEvents(nContainers, midTarget) {
 }
 
 function distributePlayer1RowSeeds(limit, startIndex, nContainers) {
-
+    console.log(nContainers);
+    let player1pos = nContainers.length;
+    let player2pos = nContainers.length + 1;
+    let lastseed = startIndex; //to know where is last seed position
     let index = startIndex - 1;
     //flag to know in witch container we are
     let flagMid1 = 1;
     let flagMid2 = 0;
+
+    board[startIndex] = 0;
     for (let i = 1; i <= limit; i++) {
 
         if (index >= 0 && flagMid1) {
 
-            nContainers[index].innerHTML += '<span class="dot"></span>';
+            board[index] += 1;
+            lastseed = index;
             index--;
             continue;
         }
         //put a seed in your container
         if (index < 0) {
-            let player1 = document.getElementById("p1");
 
-            player1.innerHTML += '<span class="dot"></span>';
+            board[player1pos] += 1;
             flagMid1 = 0;
             flagMid2 = 1;
+            lastseed = nContainers.length; //player 1 container
             index = nContainers.length / 2;
             continue;
         }
 
         if (index < nContainers.length && flagMid2) {
 
-            nContainers[index].innerHTML += '<span class="dot"></span>';
+            board[index] += 1;
+            lastseed = index;
             index++;
             if (index >= nContainers.length) {
                 flagMid1 = 1;
                 flagMid2 = 0;
+                lastseed = index;
                 index = (nContainers.length / 2) - 1;
 
             }
@@ -268,25 +380,35 @@ function distributePlayer1RowSeeds(limit, startIndex, nContainers) {
         }
 
     }
-
+    console.log(board);
+    verifylLastSeed(lastseed, 1, nContainers);
+    updateBoard(board, nContainers);
 }
 
 function distributePlayer2RowSeeds(limit, startIndex, nContainers) {
+    let player1pos = nContainers.length;
+    let player2pos = nContainers.length + 1;
     let index = startIndex + 1;
+    let lastseed = startIndex; //to know where is last seed position
     //flag to know in witch container we are
     let flagMid1 = 0;
     let flagMid2 = 1;
+
+    board[startIndex] = 0;
     for (let i = 1; i <= limit; i++) {
 
         if (index < nContainers.length && flagMid2) {
-            nContainers[index].innerHTML += '<span class="dot"></span>';
+
+            board[index] += 1;
+            lastseed = index;
             index++;
             continue;
         }
         //put a seed in your container
         if (index == nContainers.length) {
-            let player2 = document.getElementById("p2");
-            player2.innerHTML += '<span class="dot"></span>';
+
+            board[player2pos] += 1;
+            lastseed = index + 1; //player 2 position in the board
             flagMid1 = 1;
             flagMid2 = 0;
             index = (nContainers.length / 2) - 1;
@@ -295,7 +417,8 @@ function distributePlayer2RowSeeds(limit, startIndex, nContainers) {
 
         if (index >= 0 && flagMid1) {
 
-            nContainers[index].innerHTML += '<span class="dot"></span>';
+            board[index] += 1;
+            lastseed = index;
             index--;
             if (index < 0) {
                 flagMid1 = 0;
@@ -307,7 +430,9 @@ function distributePlayer2RowSeeds(limit, startIndex, nContainers) {
         }
 
     }
-
+    console.log(board);
+    verifylLastSeed(lastseed, 2, nContainers);
+    updateBoard(board, nContainers);
 }
 
 function addContainers(numberOfContainers) {
@@ -330,12 +455,19 @@ function addContainers(numberOfContainers) {
 
 function addSeeds(numberOfSeeds) {
     let ncontainers = document.getElementsByClassName("item");
+    let size = 0;
     //append items
     for (let i = 0; i < ncontainers.length; i++) {
         for (let j = 0; j < numberOfSeeds; j++) {
             ncontainers[i].innerHTML += '<span class="dot"></span>';
+
         }
+        size = i;
+        board[i] = numberOfSeeds;
     }
+    board[++size] = 0; //player1 
+    board[++size] = 0; //player2
+    console.log(board);
 
 }
 
@@ -364,14 +496,14 @@ function hasClass(elem, className) {
 // functions =======================================
 
 
-//load  code on a browser load
+//load  code when a browser load
 window.onload = function() {
-    //your code
+
 
     let scores = cookie.getCookie('scores');
     console.log('scores', scores);
     if (scores) {
-        addDataToSocreboard(scores);
+        addDataToScoreboard(scores);
     }
 
 
@@ -391,9 +523,9 @@ function playAgain() {
 }
 
 
-//addDataToSocreboard(JSON.parse(response));
+//addDataToScoreboard(JSON.parse(response));
 
-function addDataToSocreboard(scores) {
+function addDataToScoreboard(scores) {
 
     var tbody = document.getElementById("tbody")
     for (var i = 0; i < scores.length; i++) {
@@ -415,7 +547,10 @@ let game = {
     addContainers: addContainers,
     addSeeds: addSeeds,
     playAgain: playAgain,
-    resetGame: resetGame
+    resetGame: resetGame,
+    showDropOptionsPlayer: showDropOptionsPlayer,
+    showDropOptionsAgainst: showDropOptionsAgainst
+
 }
 export {
     game

@@ -28,7 +28,7 @@
            <a href="#" class="tablinks" onclick="navigateTo(event, 'JoinGame')">Jogar Mancala</a>
             </li>
             <li>
-                <a href="#" class="tablinks" onclick="navigateTo(event, 'Results')">Resultados</a>
+                <a href="#" class="tablinks" onclick="navigateTo(event, 'Results')">Classificações</a>
             </li>
             <li class="tablinks">
                 <div class="user-login-message">
@@ -107,7 +107,7 @@
 
                     <div class="gameboard-nav">
                         <div class="dropdown">
-                            <button onclick="game.showDropOptions()" class="dropbtn">Select Number of Conteiners</button>
+                            <button onclick="game.showDropOptions()" class="dropbtn">Select Number of Containers</button>
                             <div id="myDropdown" class="dropdown-content">
                                 <a href="#" onclick="game.addContainers(3)">3 Containers</a>
                                 <a href="#" onclick="game.addContainers(6)">6 Containers</a>
@@ -120,6 +120,22 @@
                                 <a href="#" onclick="game.addSeeds(3)">3 seeds</a>
                                 <a href="#" onclick="game.addSeeds(6)">6 seeds</a>
                                 <a href="#" onclick="game.addSeeds(10)">10 seeds</a>
+                            </div>
+                        </div>
+                        <div onclick="game.showDropOptionsPlayer()" class="dropdown">
+                            <button class="dropbtn">Select who plays first</button>
+                            <div id="myDropPlayFirst" class="dropdown-content">
+                                <a href="#">Player 1</a>
+                                <a href="# ">Player 2</a>
+
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button onclick="game.showDropOptionsAgainst()" class="dropbtn">Play against whom?</button>
+                            <div id="myDropPlayAgainst" class="dropdown-content">
+                                <a href="#">Computer</a>
+                                <a href="# ">Player</a>
+
                             </div>
                         </div>
                     </div>
@@ -169,6 +185,9 @@
         <!--message for winner-->
         <div>
             <div id="winning-message" class="hide">
+                <div id="idWinner">
+
+                </div>
                 <p>Would you like to play again?</p>
                 <div class="buttons">
                     <button id="playAgain" class="button-yes" onclick="game.playAgain()">Yes</button>
