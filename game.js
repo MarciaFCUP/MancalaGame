@@ -51,6 +51,7 @@ let numSeeds = null;
 // Tracks the location of the hole where marbles were grabbed
 let startIndex = null;
 
+let eventTarget = null;
 
 
 // Pre-canned marble colors could be useful for seeds?
@@ -75,7 +76,8 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
         let nContainers = document.getElementsByClassName("item");
         console.log('Ncontainers', nContainers);
 
-
+        eventTarget = e.target;
+        console.log("target", eventTarget);
         let numSeeds = e.target.children.length;
         let items = Array.from(nContainers);
         let filterItem = items.filter(x => x.id == e.target.id); //creats new array with target only id
@@ -95,17 +97,11 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
         if (currentPlayer === 1) {
 
             distributePlayer1RowSeeds(limit, startIndex, nContainers);
-            whoIsNextPlayer = 2;
 
-            //needs variable to control if the user will play or not again
-            disableEvents(e.target, nContainers, 'mid1');
-            enableEvents(nContainers, 'mid2');
             endGame(items, e, nContainers);
         } else {
             distributePlayer2RowSeeds(limit, startIndex, nContainers);
 
-            disableEvents(e.target, nContainers, 'mid2');
-            enableEvents(nContainers, 'mid1');
             endGame(items, e, nContainers);
         }
 
@@ -196,8 +192,37 @@ function verifylLastSeed(lastSeed, player, nContainers) {
 
     }
 
+    //verify if lastSeed is in own container-> play again otherwise is other player
+    let flag = 1;
+    if (player == 1 && lastSeed == nContainers.length) {
+        whoIsNext('mid1', 'mid2', nContainers);
+        flag = 0;
+    }
+    if (player == 2 && lastSeed == nContainers.length + 1) {
+        whoIsNext('mid2', 'mid1', nContainers);
+        flag = 0;
+    }
+
+    if (flag) {
+
+        if (player == 1) {
+            whoIsNext('mid2', 'mid1', nContainers);
+        }
+        if (player == 2) {
+            whoIsNext('mid1', 'mid2', nContainers);
+        }
+    }
 
 }
+
+//enable board only for next player and disable other player
+function whoIsNext(midSectionEnable, midSectionDisable, nContainers) {
+
+    enableEvents(nContainers, midSectionEnable);
+    disableEvents(eventTarget, nContainers, midSectionDisable);
+
+}
+
 
 //verify who is the winner
 function endGame(items, nContainers) {
@@ -490,8 +515,22 @@ function hasClass(elem, className) {
 }
 
 
+function SelectFirstPlayer1() {
+    let nContainers = document.getElementsByClassName("item");
+    let item = nContainers[nContainers.length / 2];
+    enableEvents(nContainers, 'mid1');
+    disableEvents(item, nContainers, 'mid2');
+
+}
 
 
+function SelectFirstPlayer2() {
+    let nContainers = document.getElementsByClassName("item");
+    let item = nContainers[nContainers.length / 3];
+    enableEvents(nContainers, 'mid2');
+    disableEvents(item, nContainers, 'mid1');
+
+}
 
 // functions =======================================
 
@@ -505,8 +544,6 @@ window.onload = function() {
     if (scores) {
         addDataToScoreboard(scores);
     }
-
-
 
 }
 
@@ -549,7 +586,9 @@ let game = {
     playAgain: playAgain,
     resetGame: resetGame,
     showDropOptionsPlayer: showDropOptionsPlayer,
-    showDropOptionsAgainst: showDropOptionsAgainst
+    showDropOptionsAgainst: showDropOptionsAgainst,
+    SelectFirstPlayer1: SelectFirstPlayer1,
+    SelectFirstPlayer2: SelectFirstPlayer2
 
 }
 export {
