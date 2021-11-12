@@ -55,7 +55,7 @@ let eventTarget = null;
 
 
 // Pre-canned marble colors could be useful for seeds?
-const marbleColors = [
+const seedColors = [
     ['#e54ed0, #ff72ff'],
     ['#b106df, #06dfb1'],
     ['#1e48e2, #060e2d'],
@@ -116,6 +116,11 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
 
 // functions =======================================
 
+function getRandomSeedColor() {
+    const random = Math.floor(Math.random() * 6)
+    return 'radial-gradient(' + seedColors[random] + ')';
+}
+
 //funtion to update board with an array
 function updateBoard(board, nContainers) {
     let ncontainers = document.getElementsByClassName("item");
@@ -125,7 +130,7 @@ function updateBoard(board, nContainers) {
         let curr = nContainers[i];
         curr.innerHTML = '';
         for (let j = 0; j < board[i]; j++) {
-            curr.innerHTML += '<span class="dot"></span>';
+            curr.innerHTML += '<span class="seed" style=" background:' + getRandomSeedColor() + '"></span>';
         }
         size = i;
     }
@@ -136,7 +141,7 @@ function updateBoard(board, nContainers) {
     size++;
     for (let j = 0; j < board[size]; j++) {
 
-        player1.innerHTML += '<span class="dot"></span>';
+        player1.innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
     }
     //update player2 position nContainers.length+1
     let player2 = document.getElementById('p2');
@@ -144,7 +149,7 @@ function updateBoard(board, nContainers) {
     size++;
     for (let j = 0; j < board[size]; j++) {
 
-        player2.innerHTML += '<span class="dot"></span>';
+        player2.innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
     }
 
 }
@@ -247,7 +252,7 @@ function endGame(items, nContainers) {
 
         for (let i = 0; i < mid2Size; i++) {
             let player2 = document.getElementById("p2");
-            player2.innerHTML += '<span class="dot"></span>';
+            player2.innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
 
         }
 
@@ -268,7 +273,7 @@ function endGame(items, nContainers) {
         mid1.innerHTML = '';
         for (let i = 0; i < mid1Size; i++) {
             let player1 = document.getElementById("p1");
-            player1.innerHTML += '<span class="dot"></span>';
+            player1.innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
 
 
         }
@@ -484,7 +489,7 @@ function addSeeds(numberOfSeeds) {
     //append items
     for (let i = 0; i < ncontainers.length; i++) {
         for (let j = 0; j < numberOfSeeds; j++) {
-            ncontainers[i].innerHTML += '<span class="dot"></span>';
+            ncontainers[i].innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
 
         }
         size = i;

@@ -1,3 +1,51 @@
+.player1,
+.player2 {
+    display: block;
+    flex-grow: 1;
+    border-radius: 25px;
+    width: 50px;
+    background-color: #f4f2ed;
+    border-width: 20px;
+    margin: 1%;
+    box-shadow: inset 0 0 4px #000000;
+    padding: 7px;
+    min-width: 50px;
+    max-width: 90px;
+}
+
+.midsection {
+    border-color: tomato;
+    margin: 1%;
+    background-color: #f4f2ed;
+    border-width: 20px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.mid1,
+.mid2 {
+    width: 100%;
+    height: 50%;
+    flex-direction: row;
+    display: flex;
+    width: 100%;
+}
+
+.item {
+    flex-grow: 4;
+    background-color: #cfcfc4;
+    border-radius: 36%;
+    height: 90%;
+    padding: 0px;
+    margin: 5px;
+    box-shadow: inset 0 0 4px #000000;
+    justify-content: space-between;
+    display: block;
+}
+
 .ResetBtn {
     display: block;
     align-content: center;
@@ -97,14 +145,12 @@
     display: block;
 }
 
-.dot {
+.seed {
     height: 10px;
     width: 10px;
-    background-color: #bbf;
     border-radius: 50%;
     display: inline-block;
-    margin-top: 9%;
-    margin-left: 5%;
+    padding: 4px;
 }
 
 .disable-event * {
@@ -119,4 +165,12 @@
 
 .hide {
     display: none;
+}
+
+#gameboard {
+    text-align: center;
+}
+
+#Results {
+    width: 100%;
 }
