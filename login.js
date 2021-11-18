@@ -46,9 +46,7 @@ window.onclick = function(event) {
 
 // Cookie functions =======================================
 function getCookie(name) {
-    console.log('call getCookie ', name)
     var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
-    console.log('call getCookie result', result)
     result && (result = JSON.parse(result[1]));
     return result;
 
@@ -69,13 +67,11 @@ function setCookie(name, value) {
     var expire = new Date();
     expire.setTime(today.getTime() + 3600000 * 24 * 15);
     var cookie = name + "=" + JSON.stringify(value) + ";path=/" + ";expires=" + expire.toUTCString();
-    console.log('cookie', cookie)
     document.cookie = cookie;
 }
 
 function checkLoginCookie() {
     let user = getCookie('userSession');
-    console.log('user', user)
     if (user != undefined && user != "") {
         var displayUsername = document.getElementById('displayUsername');
         displayUsername.innerHTML = "Welcome " + user.username + "!";

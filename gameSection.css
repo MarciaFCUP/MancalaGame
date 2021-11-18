@@ -1,3 +1,37 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+aside {
+    width: 30%;
+    padding-left: 8px;
+    font-style: italic;
+    background-color: lightgray;
+    height: 100px;
+    display: flex;
+}
+
+.header-log {
+    display: flex;
+}
+
+.log-container {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    text-align: initial;
+}
+
+.log-item {
+    margin: 5px;
+    margin-left: 0px;
+    vertical-align: middle;
+}
+
 .player1,
 .player2 {
     display: block;
@@ -23,6 +57,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    min-height: 400px;
 }
 
 .mid1,
@@ -36,7 +71,7 @@
 
 .item {
     flex-grow: 4;
-    background-color: #cfcfc4;
+    background-color: whitesmoke;
     border-radius: 36%;
     height: 90%;
     padding: 0px;
@@ -159,7 +194,7 @@
 }
 
 .disabled {
-    background-color: #eeeded;
+    background-color: darkgrey;
     pointer-events: none;
 }
 

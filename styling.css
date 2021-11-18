@@ -7,6 +7,7 @@ header {
 
 html,
 body {
+    min-height: fit-content;
     height: 100%;
     background-color: #fff;
     padding: 0px;
@@ -166,6 +167,7 @@ button:hover {
     width: auto;
     padding: 8px 18px;
     background-color: #f44336;
+    margin: 0%;
 }
 
 .imgcontainer {
