@@ -242,7 +242,7 @@
                 </div>
 
                 <section>
-                    <button id="reset" class="cancelbtn" onclick="game.resetGame()">
+                    <button id="reset" class="cancelbtn" type="button" onclick="game.resetGame()">
                 Terminar
               </button>
                 </section>
@@ -270,12 +270,11 @@
                         <div id="idWinner"></div>
                         <p>Would you like to play again?</p>
                         <div class="buttons">
-                            <button id="playAgain" class="button-yes" onclick="game.playAgain()">
-              Yes
-            </button>
-                            <button class="button-no" onclick="noPlayAgain()">No</button>
+                            <button id="playAgain" type="button" class="button-yes" onclick="game.playAgain()">Yes</button>
+                            <button class="button-no" type="button" onclick="game.noPlayAgain()">No</button>
                         </div>
                     </div>
+                </div>
                 </div>
                 </main>
                 <footer>

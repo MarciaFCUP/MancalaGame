@@ -582,17 +582,6 @@ function addDataToScoreboard(scores) {
 // functions =======================================
 
 
-//load  code when a browser load
-// window.onload = function() {
-//     let scores = cookie.getCookie('scores');
-
-//     if (scores) {
-//         addDataToScoreboard(scores);
-//     }
-
-// }
-
-
 let game = {
     showDropOptions: showDropOptions,
     showDropOptionsSeeds: showDropOptionsSeeds,
