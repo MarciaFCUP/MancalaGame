@@ -4,13 +4,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet" type="text/css" href="styling.css" />
-    <link rel="stylesheet" type="text/css" href="gameSection.css" />
-    <link rel="stylesheet" type="text/css" href="scoreSection.css" />
+    <link rel="stylesheet" type="text/css" href="src/styling.css" />
+    <link rel="stylesheet" type="text/css" href="src/gameSection.css" />
+    <link rel="stylesheet" type="text/css" href="src/scoreSection.css" />
 
-    <script src="navigation.js"></script>
-    <script type="module" src="login.js"></script>
-    <script type="module" src="game.js"></script>
+    <script src="src/navigation.js"></script>
+    <script type="module" src="src/login.js"></script>
+    <script type="module" src="src/game.js"></script>
 
     <title>My Mancala Game</title>
 </head>
@@ -32,17 +32,17 @@
             href="#"
             class="tablinks"
             onclick="navigateTo(event, 'Instrutions')"
-            >Instruções</a
+            >Instructions</a
           >
         </li>
         <li>
           <a href="#" class="tablinks" onclick="navigateTo(event, 'JoinGame')"
-            >Jogar Mancala</a
+            >Play Mancala</a
           >
         </li>
         <li>
           <a href="#" class="tablinks" onclick="navigateTo(event, 'Results')"
-            >Classificações</a
+            >Classifications</a
           >
         </li>
         <li class="tablinks">
@@ -100,6 +100,7 @@
             <div class="container">
               <label for="uname"><b>Username</b></label>
               <input
+                id="uname"
                 type="text"
                 placeholder="Enter Username"
                 name="uname"
@@ -108,6 +109,7 @@
 
               <label for="psw"><b>Password</b></label>
               <input
+                id="psw"
                 type="password"
                 placeholder="Enter Password"
                 name="psw"
@@ -134,52 +136,51 @@
 
       <!-- Tab content -->
       <div id="Presentation" class="tabcontent">
-        <h3>Comece a jogar Mancala</h3>
+        <h3>Start play Mancala</h3>
         <iframe src="https://www.youtube.com/embed?v=iSJk6CYsf6c"></iframe>
       </div>
       <div id="Instrutions" class="tabcontent">
-        <h3>Instruções do jogo</h3>
+        <h3>Game Instrutions</h3>
         <div>
-          &nbsp;O jogo passa-se num tabuleiro com dois conjuntos de cavidades
-          centrais alinhadas e dois armazens, as cavidades maiores. Cada jogador
-          controla as cavidades do seu lado bem como, o armazém à sua direita.
-          As peças denomina-se de sementes.
-          <p><b>Inicio do jogo</b></p>
-          Os armazéns estão vazios (sem sementes) e as restantes cavidades têm o
-          mesmo número de sementes.
-          <p><b>Forma de jogar</b></p>
-          Jogadores semeiam as suas sementes alternadamente. Na sua vez semeiam
-          a partir de uma das suas cavidades consoante a situação da última
-          semente semeada, podem voltar a jogar ou ficar com algumas sementes do
-          adversário. O jogo termina quando um dos jogadores ficar sem sementes.
-          <p><b>Começar a semear</b></p>
-          Escolher uma cavidade do seu lado (que não o armazém) e recolher todas
-          as N sementes dessa cavidade. Colocar 1 semente nas N cavidade
-          seguintes. A semeadura é feita no sentido anti-horário. Se a cavidade
-          seguinte for o seu armazém, semear também sobrando sementes, continuar
-          no lado do adversário Se atingir o armazém do adversário, não semear
-          mas depois continuar do seu lado, se ainda tiver sementes. Volta a
-          jogar se a última semente for semeada for no seu próprio armazém
-          Semeando cavidade agora vazia, a última semente cai no armazém e volta
-          a jogar. Se a última semente calhar numa sua cavidade vazia,
-          transferir para o seu armazém as sementes.
-          <p><b>Terminar</b></p>
-          Jogo termina quando um dos jogadores não pode jogar porque todas as
-          suas cavidades estão vazias. O outro jogador recolhe sementes nas suas
-          cavidades. Ganha jogador cujo armazém tem mais sementes.
+          &nbsp;The game takes place on a board with two sets of aligned central
+          holes and two storages, the larger holes. Each player controls the
+          holes on their side as well as the warehouse on their right. The
+          pieces are called seeds.
+          <p><b>Start Game</b></p>
+          The warehouses are empty (no seeds) and the remaining holes have the
+          same number of seeds.
+          <p><b>How to play</b></p>
+          Players sow their seeds alternately. In turn, they sow from one of
+          their holes depending on the situation of the last seed sown, they can
+          play again or keep some of the opponent's seeds. The game ends when
+          one of the players runs out of seeds.
+          <p><b>Start sowing</b></p>
+          Choose a hole on your side (other than the warehouse) and collect all
+          N seeds from that hole. Place 1 seed in the next N wells. Seeding is
+          done counterclockwise. If the next hole is your storage, sow seeds
+          left over as well, continue on the opponent's side If you reach the
+          opponent's storage, do not sow but then continue on your side, if you
+          still have seeds. Play again if the last seed is sown in your own
+          store. Sowing now empty cavity, the last seed falls into the warehouse
+          and returns to play. If the last seed lands in your empty hole,
+          transfer the seeds to your storage.
+          <p><b>End Game</b></p>
+          Game ends when one of the players cannot play because all their holes
+          are empty. The other player collects seeds in their holes. The player
+          whose warehouse has the most seeds wins.
         </div>
       </div>
 
       <div id="JoinGame" class="tabcontent">
         <div id="pleaseLogin">
-          <p>Por favor efetue registo para iniciar o jogo</p>
+          <p>Please do login to start game</p>
         </div>
         <div id="displayGame">
           <h3>Mancala!</h3>
-          <p>Benvindo ao jogo de Mancala!</p>
+          <p>Welcome to Mancala Game!</p>
 
           <div id="gameboard">
-            <h1 id="game-name">Tabuleiro de jogo</h1>
+            <h1 id="game-name">Game Board</h1>
             <!-- 					Print the gameboard:					 -->
 
             <div class="gameboard-nav">
@@ -222,9 +223,14 @@
                 </div>
                 <div class="container">
                     <h5 class="header-log">Game Log</h5>
-                    <aside>
+                    <aside class="aside-log">
                         <div id="log" class="log-container"></div>
                     </aside>
+                    <section class="aside-end-game">
+                        <button id="reset" class="cancelbtn" type="button" onclick="game.resetGame()">
+                  End Game
+                </button>
+                    </section>
                     <div class="text-player">
                         <h4>Player 1</h4>
                     </div>
@@ -240,18 +246,12 @@
                         <h4>Player 2</h4>
                     </div>
                 </div>
-
-                <section>
-                    <button id="reset" class="cancelbtn" type="button" onclick="game.resetGame()">
-                Terminar
-              </button>
-                </section>
                 </div>
                 </div>
                 </div>
                 <div id="Results" class="tabcontent">
-                    <h3>Classificações</h3>
-                    <p>Apresentação dos resultados de cada jogador.</p>
+                    <h3>Classifications</h3>
+                    <p>Score of each player.</p>
                     <table id="socreboard" class="table striped">
                         <thead>
                             <tr>
@@ -270,13 +270,17 @@
                         <div id="idWinner"></div>
                         <p>Would you like to play again?</p>
                         <div class="buttons">
-                            <button id="playAgain" type="button" class="button-yes" onclick="game.playAgain()">Yes</button>
-                            <button class="button-no" type="button" onclick="game.noPlayAgain()">No</button>
+                            <button id="playAgain" type="button" class="button-yes" onclick="game.playAgain()">
+              Yes
+            </button>
+                            <button class="button-no" type="button" onclick="game.noPlayAgain()">
+              No
+            </button>
                         </div>
                     </div>
                 </div>
-                </div>
                 </main>
+
                 <footer>
                     <p class="textFooter">@marciaUp201202560 - @FCUP - @Tecnologias Web</p>
                 </footer>

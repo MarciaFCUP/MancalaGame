@@ -78,25 +78,33 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
         let items = Array.from(nContainers);
         let filterItem = items.filter(x => x.id == e.target.id); //creats new array with target only id
         let item = filterItem[0];
-        console.log("comecou envento seeds", eventTarget, numSeeds);
         //clean container
         e.target.innerHTML = '';
 
         if (hasClass(item, 'mid1')) {
-            currentPlayer = 1
+            currentPlayer = 1;
         } else {
-            currentPlayer = 2
+            currentPlayer = 2;
         }
+
         let startIndex = Number(item.id);
         let limit = numSeeds;
         if (currentPlayer === 1) {
 
-            distributePlayer1RowSeeds(limit, startIndex, nContainers);
+            distributePlayer1RowSeeds(e, limit, startIndex, nContainers);
 
-            endGame(items, e, nContainers);
+            //  updateBoard(board, nContainers);
+
+            // endGame(items, e, nContainers);
+            // verifylLastSeed(lastseed, 1, nContainers);
+
         } else {
-            distributePlayer2RowSeeds(limit, startIndex, nContainers);
-            endGame(items, e, nContainers);
+            distributePlayer2RowSeeds(e, limit, startIndex, nContainers);
+
+            //updateBoard(board, nContainers);
+            // endGame(items, e, nContainers);
+            // verifylLastSeed(lastseed, 2, nContainers);
+
         }
     }
 
@@ -143,13 +151,12 @@ function updateBoard(board, nContainers) {
 
         player2.innerHTML += '<span class="seed"  style=" background:' + getRandomSeedColor() + '"></span>';
     }
-    console.log("update", board);
 
 }
 
 
 function verifylLastSeed(lastSeed, player, nContainers) {
-    console.log("lastSeed", lastSeed);
+
     let player1pos = nContainers.length;
     let player2pos = nContainers.length + 1;
     let opposed = null; //opposed postion
@@ -166,7 +173,7 @@ function verifylLastSeed(lastSeed, player, nContainers) {
         if (lastSeed >= nContainers.length / 2) {
             midSection = 2;
         }
-        console.log("verify lasteseed, player, midsection, size", lastSeed, player, midSection, size);
+
         if (size == 1 && midSection == player) {
 
             if (player == 1) {
@@ -191,23 +198,24 @@ function verifylLastSeed(lastSeed, player, nContainers) {
     if (player == 1 && lastSeed == nContainers.length) {
         whoIsNext('mid1', 'mid2', nContainers);
         flag = 0;
-        //  alert("Play again player 1!");
+        writeLog("Last seed in own container. Player 1 time to play again!");
     }
     if (player == 2 && lastSeed == nContainers.length + 1) {
         whoIsNext('mid2', 'mid1', nContainers);
         flag = 0;
-        // alert("Play again player 2!");
+        writeLog("Last seed in own container. Computer time to play again!");
         playComputer();
     }
 
     if (flag) {
         if (player == 1) {
             whoIsNext('mid2', 'mid1', nContainers);
-            console.log("depois do 1 é o 2");
-            writeLog("depois do 1 é o 2");
+
+            writeLog("Computer time to play");
             playComputer();
         }
         if (player == 2) {
+            writeLog("player 1 time to play");
             whoIsNext('mid1', 'mid2', nContainers);
         }
     }
@@ -275,30 +283,32 @@ function endGame(items, nContainers) {
     }
 
 
-    // compare number seeds in each player
-    function compareNumSeeds() {
+}
 
-        let seedsP1 = document.getElementById("p1").children.length;
-        let seedsP2 = document.getElementById("p2").children.length;
+// compare number seeds in each player
+function compareNumSeeds() {
+    let nContainers = document.getElementsByClassName("item");
+    let seedsP1 = board[nContainers.length];
+    let seedsP2 = board[nContainers.length + 1];
+    console.log("seedp1", seedsP1);
+    console.log("seedp2", seedsP2);
 
-        console.log("seedsP1", seedsP1);
-
-        if (seedsP1 > seedsP2) {
-            whoIsWinner = 1;
-            document.getElementById('idWinner').innerHTML = '<br>You are the winner!<br>';
-            writeLog("Player1 is the winner!");
-        } else {
-            whoIsWinner = 2;
-            document.getElementById('idWinner').innerHTML = '<br>You loose!<br>';
-            writeLog("Computer is the winner!");
-        }
-        //clean board
-        resetGame();
-        //CONFIRMAR
-        let player = cookie.getCookie('userSession');
-        console.log(player);
-        saveScore(player.username, seedsP1);
+    if (seedsP1 > seedsP2) {
+        whoIsWinner = 1;
+        document.getElementById('idWinner').innerHTML = '<br>You are the winner!<br>';
+        writeLog("Player1 is the winner!");
+    } else {
+        whoIsWinner = 2;
+        document.getElementById('idWinner').innerHTML = '<br>You loose!<br>';
+        writeLog("Computer is the winner!");
     }
+    //clean board
+    resetGame();
+    //CONFIRMAR
+    let player = cookie.getCookie('userSession');
+    console.log(player);
+    saveScore(player.username, seedsP1);
+    return false;
 }
 
 function saveScore(name, value) {
@@ -351,8 +361,9 @@ function enableEvents(nContainers, midTarget) {
 
 }
 
-function distributePlayer1RowSeeds(limit, startIndex, nContainers) {
-
+function distributePlayer1RowSeeds(e, limit, startIndex, nContainers) {
+    writeLog("Player 1 plays in container " + startIndex + " with " + limit + " seeds;")
+    let items = Array.from(nContainers);
     let player1pos = nContainers.length;
     let lastseed = startIndex; //to know where is last seed position
     let index = startIndex - 1;
@@ -391,18 +402,18 @@ function distributePlayer1RowSeeds(limit, startIndex, nContainers) {
             continue;
         }
     }
-    console.log("jogou o 1");
-    writeLog("jogou o 1");
     updateBoard(board, nContainers);
-    verifylLastSeed(lastseed, 1, nContainers);
 
+    endGame(items, e, nContainers);
+    verifylLastSeed(lastseed, 1, nContainers);
 
 }
 
 
-function distributePlayer2RowSeeds(limit, startIndex, nContainers) {
-    writeLog(`player2: numSeeds: ${limit} startIndex: ${startIndex}`);
-    console.log("player2:numSeeds, startIndex", limit, startIndex);
+function distributePlayer2RowSeeds(e, limit, startIndex, nContainers) {
+
+    writeLog("Computer plays in container " + startIndex + " with " + limit + " seeds;")
+    let items = Array.from(nContainers);
     let player2pos = nContainers.length + 1;
     let index = startIndex + 1;
     let lastseed = startIndex + 1; //to know where is last seed position
@@ -442,6 +453,7 @@ function distributePlayer2RowSeeds(limit, startIndex, nContainers) {
     }
     console.log(board);
     updateBoard(board, nContainers);
+    endGame(items, e, nContainers);
     verifylLastSeed(lastseed, 2, nContainers);
 
 }
@@ -455,8 +467,8 @@ function writeLog(message) {
 
 //play against computer
 function playComputer() {
-    writeLog("computer time to play");
-    console.log("computer time to play");
+
+
     let nContainers = document.getElementsByClassName("item");
 
     let noEmptyIndex = null;
@@ -466,8 +478,10 @@ function playComputer() {
             break;
         }
     }
-    console.log('playComputer noEmptyIndex', noEmptyIndex)
-    document.getElementById(noEmptyIndex).click();
+    if (noEmptyIndex != null) {
+        document.getElementById(noEmptyIndex).click();
+    }
+
 }
 
 
@@ -513,11 +527,14 @@ function resetGame() {
     let mid2 = document.getElementsByClassName("mid2");
     let player1 = document.getElementById("p1");
     let player2 = document.getElementById("p2");
+
     //clean all elements 
     mid1[0].innerHTML = '';
     mid2[0].innerHTML = '';
     player1.innerHTML = '';
     player2.innerHTML = '';
+
+
 }
 
 function hasClass(elem, className) {
@@ -535,8 +552,6 @@ function SelectFirstPlayer1() {
 
 
 function SelectFirstPlayer2() {
-    console.log("comecou o2");
-    writeLog("comecou o2");
     let nContainers = document.getElementsByClassName("item");
     let item = nContainers[nContainers.length / 3];
     enableEvents(nContainers, 'mid2');
@@ -558,7 +573,6 @@ function playAgain() {
 
 function noPlayAgain() {
     var message = document.getElementById("winning-message");
-    console.log("agora msg", message);
     message.classList.add('hide');
 }
 

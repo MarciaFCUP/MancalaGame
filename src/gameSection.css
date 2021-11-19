@@ -6,12 +6,22 @@ body {
     padding: 0;
 }
 
-aside {
+.container {
+    min-height: 800px;
+}
+
+.aside-log {
     width: 30%;
     padding-left: 8px;
     font-style: italic;
     background-color: lightgray;
     height: 100px;
+    display: flex;
+}
+
+.aside-end-game {
+    float: right;
+    vertical-align: top;
     display: flex;
 }
 
