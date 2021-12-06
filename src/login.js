@@ -1,15 +1,3 @@
-//load the first code on a browser readyState
-(function(window, document) {
-    var t = setInterval(function() {
-        if ('complete' === document.readyState) {
-            clearInterval(t);
-
-            //check do login
-            checkLoginCookie();
-        }
-    }, 10);
-})(window, document);
-
 function loginFuntion(event) {
 
     let myForm = document.getElementById('myForm');
@@ -120,5 +108,17 @@ export {
     cookie
 };
 
-window.login = login;
+//load the first code on a browser readyState
+(function(window, document) {
+    var t = setInterval(function() {
+        if ('complete' === document.readyState) {
+            clearInterval(t);
+
+            //check do login
+            checkLoginCookie();
+            window.login = login;
+        }
+    }, 10);
+})(window, document);
+
 //End Export functions =======================================

@@ -11,6 +11,7 @@
     <script src="src/navigation.js"></script>
     <script type="module" src="src/login.js"></script>
     <script type="module" src="src/game.js"></script>
+    <script src="src/api.js"></script>
 
     <title>My Mancala Game</title>
 </head>
@@ -88,6 +89,7 @@
             id="myForm"
             class="modal-content animate"
             onsubmit="return false"
+            method="post"
           >
             <div class="imgcontainer">
               <img
@@ -204,20 +206,20 @@
                         <a href="#" onclick="game.addSeeds(10)">10 seeds</a>
                     </div>
                 </div>
-                <div onclick="game.showDropOptionsPlayer()" class="dropdown">
-                    <button class="dropbtn">Select who plays first</button>
-                    <div id="myDropPlayFirst" class="dropdown-content">
-                        <a href="#" onclick="game.SelectFirstPlayer1()">Player 1</a>
-                        <a href="#" onclick=" game.SelectFirstPlayer2()">Player 2</a>
-                    </div>
-                </div>
                 <div class="dropdown">
                     <button onclick="game.showDropOptionsAgainst()" class="dropbtn">
                   Play against whom?
                 </button>
                     <div id="myDropPlayAgainst" class="dropdown-content">
-                        <a href="#">Computer</a>
-                        <a href="#">Player</a>
+                        <a href="#" onclick="game.playAgainstComputer()">Computer</a>
+                        <a href="#" onclick="game.playAgainstOpponent()">Player </a>
+                    </div>
+                </div>
+                <div onclick="game.showDropOptionsPlayer()" class="dropdown">
+                    <button class="dropbtn">Select who plays first</button>
+                    <div id="myDropPlayFirst" class="dropdown-content">
+                        <a href="#" onclick="game.SelectFirstPlayer1()">Player 1</a>
+                        <a href="#" onclick=" game.SelectFirstPlayer2()">Player 2</a>
                     </div>
                 </div>
                 </div>
@@ -252,12 +254,12 @@
                 <div id="Results" class="tabcontent">
                     <h3>Classifications</h3>
                     <p>Score of each player.</p>
-                    <table id="socreboard" class="table striped">
+                    <table id="scoreboard" class="table striped">
                         <thead>
                             <tr>
-                                <th>Rank</th>
                                 <th>Player name</th>
-                                <th>Score</th>
+                                <th>Victories</th>
+                                <th>Games</th>
                             </tr>
                         </thead>
                         <tbody id="tbody"></tbody>

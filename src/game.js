@@ -44,14 +44,61 @@ let whoIsNextPlayer = 0;
 
 // Tracks the current player's turn
 let currentPlayer = null;
-
 // Tracks the current number of marbles to distribute
 let numSeeds = null;
-
 // Tracks the location of the hole where marbles were grabbed
 let startIndex = null;
-
 let eventTarget = null;
+//play agains computer or a player
+let whoIsOpponent;
+
+//to know the inicial configuration of board
+let configs = {};
+
+
+//board useful for 2nd part
+
+class Nick {
+    store;
+    pits;
+    constructor(store, pits) {
+        this.store = store;
+        this.pits = pits;
+
+    }
+
+}
+class MyBoard {
+    sides;
+    turn;
+    constructor(sides, turn) {
+        this.sides = sides;
+        this.turn = this.turn;
+
+    }
+
+}
+class Sides {
+    mynick;
+    oppnick;
+    constructor(mynick, oppnick) {
+        this.mynick = mynick;
+        this.oppnick = oppnick;
+    }
+}
+
+function gameBoard(mynick, mystore, mypits, oppnick, oppstore, opppits, turn) {
+
+    let board = new MyBoard(new Sides(new Nick(mystore, mypits), new Nick(oppstore, opppits)), turn);
+    console.log("teste do board!", board);
+
+}
+
+
+
+
+
+
 
 
 // Pre-canned marble colors could be useful for seeds?
@@ -484,6 +531,16 @@ function playComputer() {
 
 }
 
+//play against player
+function playAgainstOpponent() {
+    whoIsOpponent = "player";
+
+}
+
+function playAgainstComputer() {
+    whoIsOpponent = "computer";
+
+}
 
 function addContainers(numberOfContainers) {
     let mid1 = document.getElementsByClassName("mid1");
@@ -501,6 +558,8 @@ function addContainers(numberOfContainers) {
         mid1[0].innerHTML += '<div id="' + i + '" class="mid1 item"> </div>';
         mid2[0].innerHTML += '<div id="' + (numberOfContainers + i) + '" class=" mid2 item"> </div>'
     }
+
+    configs.containers = numberOfContainers;
 }
 
 function addSeeds(numberOfSeeds) {
@@ -518,7 +577,7 @@ function addSeeds(numberOfSeeds) {
     board[++size] = 0; //player1 
     board[++size] = 0; //player2
     console.log(board);
-
+    configs.seeds = numberOfSeeds;
 }
 
 //clear and stop board game
@@ -556,7 +615,10 @@ function SelectFirstPlayer2() {
     let item = nContainers[nContainers.length / 3];
     enableEvents(nContainers, 'mid2');
     disableEvents(item, nContainers, 'mid1');
-    playComputer();
+    if (whoIsOpponent === "computer") {
+        playComputer();
+    }
+
 }
 
 
@@ -568,7 +630,8 @@ function playAgain() {
     message.classList.add('hide');
     enableEvents(nContainers, 'mid1');
     enableEvents(nContainers, 'mid2');
-
+    addContainers(configs.containers);
+    addSeeds(configs.seeds);
 }
 
 function noPlayAgain() {
@@ -584,12 +647,11 @@ function addDataToScoreboard(scores) {
     var tbody = document.getElementById("tbody")
     for (var i = 0; i < scores.length; i++) {
         var tr = document.createElement('tr');
-        var td = "<td>" + (i + 1) + "</td>" +
-            "<td><img class='avatar2' src='https://www.w3schools.com/howto/img_avatar2.png'/>" +
-            scores[i].displayName + "</td>" +
-            "<td>" + scores[i].score + "</td>";
+        var td = "<td>" + scores[i].displayName + "</td>" +
+            "<td>" + (i + 1) + "</td>" +
+            "<td>" + '1' + "</td>";
         tr.innerHTML = td;
-        tbody.appendChild(tr)
+        tbody.appendChild(tr);
     }
 }
 
@@ -607,7 +669,10 @@ let game = {
     showDropOptionsPlayer: showDropOptionsPlayer,
     showDropOptionsAgainst: showDropOptionsAgainst,
     SelectFirstPlayer1: SelectFirstPlayer1,
-    SelectFirstPlayer2: SelectFirstPlayer2
+    SelectFirstPlayer2: SelectFirstPlayer2,
+    playAgainstComputer: playAgainstComputer,
+    playAgainstOpponent: playAgainstOpponent
+
 
 }
 export {
@@ -620,6 +685,9 @@ window.game = game;
 
 //load the first code on a browser readyState is the as window.onload
 (function(window, document) {
+
+    let teste = new gameBoard('mc', 0, [2, 3], 'zp', 1, [2, 9], 'mc');
+    console.log("teste do board", teste);
     var t = setInterval(function() {
         if ('complete' === document.readyState) {
             clearInterval(t);
