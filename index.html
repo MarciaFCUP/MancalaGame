@@ -11,7 +11,7 @@
     <script src="src/navigation.js"></script>
     <script type="module" src="src/login.js"></script>
     <script type="module" src="src/game.js"></script>
-    <script src="src/api.js"></script>
+    <script type="module" src="src/api.js"></script>
 
     <title>My Mancala Game</title>
 </head>
@@ -100,6 +100,7 @@
             </div>
 
             <div class="container">
+              <div id="errLogin"></div>
               <label for="uname"><b>Username</b></label>
               <input
                 id="uname"
@@ -121,9 +122,6 @@
               <button type="button" id="submitLogin" onclick="login.login()">
                 Login
               </button>
-            </div>
-
-            <div class="container" style="background-color: #f1f1f1">
               <button
                 type="button"
                 onclick="document.getElementById('id01').style.display='none'"

@@ -219,3 +219,8 @@ body {
 #Results {
     width: 100%;
 }
+
+#errLogin {
+    color: red;
+    text-align: -webkit-center;
+}

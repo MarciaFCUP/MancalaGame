@@ -1,3 +1,5 @@
+import { api } from "./api.js";
+
 function loginFuntion(event) {
 
     let myForm = document.getElementById('myForm');
@@ -12,12 +14,26 @@ function loginFuntion(event) {
 
     console.log('retrieved: ', retrieved);
     if (retrieved.uname != "" && retrieved.psw != "") {
-        setLoginCookie(retrieved.uname, retrieved.psw);
-        document.getElementById('navLogin').style.display = 'none';
-        checkLoginCookie();
-        document.getElementById('id01').style.display = 'none';
-    }
+        let resul = {};
 
+        api.register(retrieved.uname, retrieved.psw).then(value => {
+            resul = value;
+            console.log("no login value ", value);
+            if (api.isEmpty(resul)) {
+                setLoginCookie(retrieved.uname, retrieved.psw);
+                document.getElementById('navLogin').style.display = 'none';
+                checkLoginCookie();
+                document.getElementById('id01').style.display = 'none';
+                console.log("ok");
+            } else {
+                let user = document.getElementById("errLogin");
+                user.innerText = resul.error;
+                console.log("njk", resul.error);
+            }
+
+        });
+
+    }
 
 }
 

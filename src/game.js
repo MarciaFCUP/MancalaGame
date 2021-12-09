@@ -1,3 +1,4 @@
+import { api } from "./api.js";
 import { cookie } from "./login.js";
 
 
@@ -52,52 +53,12 @@ let eventTarget = null;
 //play agains computer or a player
 let whoIsOpponent;
 
-//to know the inicial configuration of board
+//to know the inicial configuration of board like containers and seeds
 let configs = {};
-
-
-//board useful for 2nd part
-
-class Nick {
-    store;
-    pits;
-    constructor(store, pits) {
-        this.store = store;
-        this.pits = pits;
-
-    }
-
-}
-class MyBoard {
-    sides;
-    turn;
-    constructor(sides, turn) {
-        this.sides = sides;
-        this.turn = this.turn;
-
-    }
-
-}
-class Sides {
-    mynick;
-    oppnick;
-    constructor(mynick, oppnick) {
-        this.mynick = mynick;
-        this.oppnick = oppnick;
-    }
-}
-
-function gameBoard(mynick, mystore, mypits, oppnick, oppstore, opppits, turn) {
-
-    let board = new MyBoard(new Sides(new Nick(mystore, mypits), new Nick(oppstore, opppits)), turn);
-    console.log("teste do board!", board);
-
-}
-
-
-
-
-
+//group id for debbug
+let group = 15;
+//hand game when connect to server and opponent
+let handGame = null;
 
 
 
@@ -126,8 +87,9 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
         let filterItem = items.filter(x => x.id == e.target.id); //creats new array with target only id
         let item = filterItem[0];
         //clean container
-        e.target.innerHTML = '';
-
+        if (whoIsOpponent == "computer") {
+            e.target.innerHTML = '';
+        }
         if (hasClass(item, 'mid1')) {
             currentPlayer = 1;
         } else {
@@ -146,7 +108,10 @@ const distributePlayerRowSeeds = document.addEventListener('click', function(e) 
             // verifylLastSeed(lastseed, 1, nContainers);
 
         } else {
-            distributePlayer2RowSeeds(e, limit, startIndex, nContainers);
+            if (whoIsOpponent == "computer") {
+                distributePlayer2RowSeeds(e, limit, startIndex, nContainers);
+            }
+
 
             //updateBoard(board, nContainers);
             // endGame(items, e, nContainers);
@@ -250,16 +215,22 @@ function verifylLastSeed(lastSeed, player, nContainers) {
     if (player == 2 && lastSeed == nContainers.length + 1) {
         whoIsNext('mid2', 'mid1', nContainers);
         flag = 0;
-        writeLog("Last seed in own container. Computer time to play again!");
-        playComputer();
+
+        if (whoIsOpponent === "computer") {
+            writeLog("Last seed in own container. Computer time to play again!");
+            playComputer();
+        }
     }
 
     if (flag) {
         if (player == 1) {
             whoIsNext('mid2', 'mid1', nContainers);
 
-            writeLog("Computer time to play");
-            playComputer();
+
+            if (whoIsOpponent === "computer") {
+                writeLog("Computer time to play");
+                playComputer();
+            }
         }
         if (player == 2) {
             writeLog("player 1 time to play");
@@ -409,6 +380,27 @@ function enableEvents(nContainers, midTarget) {
 }
 
 function distributePlayer1RowSeeds(e, limit, startIndex, nContainers) {
+    let session = cookie.getCookie('userSession');
+    if (whoIsOpponent == "player") {
+        api.notify(session.username, session.password, handGame, startIndex).then(res => {
+            console.log("comecei a jogar", res);
+            //corret answer is empty obj
+            if (api.isEmpty(res)) {
+                // makeTheMovePlayer1(e, limit, startIndex, nContainers);
+                console.log("right move");
+            } else {
+                writeLogError(res.error);
+            }
+        });
+
+    } else {
+        makeTheMovePlayer1(e, limit, startIndex, nContainers);
+    }
+
+}
+
+//for player 1
+function makeTheMovePlayer1(e, limit, startIndex, nContainers) {
     writeLog("Player 1 plays in container " + startIndex + " with " + limit + " seeds;")
     let items = Array.from(nContainers);
     let player1pos = nContainers.length;
@@ -417,6 +409,7 @@ function distributePlayer1RowSeeds(e, limit, startIndex, nContainers) {
     //flag to know in witch container we are
     let flagMid1 = 1;
     let flagMid2 = 0;
+
 
     board[startIndex] = 0;
     for (let i = 1; i <= limit; i++) {
@@ -453,9 +446,7 @@ function distributePlayer1RowSeeds(e, limit, startIndex, nContainers) {
 
     endGame(items, e, nContainers);
     verifylLastSeed(lastseed, 1, nContainers);
-
 }
-
 
 function distributePlayer2RowSeeds(e, limit, startIndex, nContainers) {
 
@@ -512,6 +503,12 @@ function writeLog(message) {
     log.scrollTop = log.scrollHeight;
 }
 
+function writeLogError(message) {
+    let log = document.getElementById("log");
+    log.innerHTML += '<div class="log-item">  <div class="seed log-item"  style=" background:' + "red" + '"></div>' + message + ' </div>';
+
+    log.scrollTop = log.scrollHeight * 2;
+}
 //play against computer
 function playComputer() {
 
@@ -533,7 +530,16 @@ function playComputer() {
 
 //play against player
 function playAgainstOpponent() {
+
+    let session = cookie.getCookie('userSession');
+    console.log("cookies test", session);
     whoIsOpponent = "player";
+    api.join(group, session.username, session.password, configs.containers, configs.seeds).then(value => {
+        handGame = value.game;
+        console.log("hand", handGame);
+
+    });
+
 
 }
 
@@ -582,16 +588,26 @@ function addSeeds(numberOfSeeds) {
 
 //clear and stop board game
 function resetGame() {
-    let mid1 = document.getElementsByClassName("mid1");
-    let mid2 = document.getElementsByClassName("mid2");
-    let player1 = document.getElementById("p1");
-    let player2 = document.getElementById("p2");
+    let session = cookie.getCookie('userSession');
+    if (whoIsOpponent == "player") {
+        api.leave(session.username, session.password, handGame).then(res => {
+            console.log("leave the game", res);
+        });
+    } else {
 
-    //clean all elements 
-    mid1[0].innerHTML = '';
-    mid2[0].innerHTML = '';
-    player1.innerHTML = '';
-    player2.innerHTML = '';
+        let mid1 = document.getElementsByClassName("mid1");
+        let mid2 = document.getElementsByClassName("mid2");
+        let player1 = document.getElementById("p1");
+        let player2 = document.getElementById("p2");
+
+        //clean all elements 
+        mid1[0].innerHTML = '';
+        mid2[0].innerHTML = '';
+        player1.innerHTML = '';
+        player2.innerHTML = '';
+
+    }
+
 
 
 }
@@ -655,6 +671,30 @@ function addDataToScoreboard(scores) {
     }
 }
 
+//to display ranking
+document.addEventListener('click', function(e) {
+    console.log("target", e.target.innerText);
+    if (hasClass(e.target, 'tablinks') && e.target.innerText == "Classifications") {
+        console.log("Classifications yeahhh", e.target.innerText);
+
+        var table = document.getElementById("tbody");
+        api.ranking().then(user => {
+
+            for (let i = 0; i < 10; i++) {
+                var row = table.insertRow(i);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                // Add some text to the new cells:
+                cell1.innerHTML = user.ranking[i].nick;
+                cell2.innerHTML = user.ranking[i].victories;
+                cell3.innerHTML = user.ranking[i].games;
+            }
+
+
+        });
+    }
+});
 // functions =======================================
 
 
@@ -686,8 +726,6 @@ window.game = game;
 //load the first code on a browser readyState is the as window.onload
 (function(window, document) {
 
-    let teste = new gameBoard('mc', 0, [2, 3], 'zp', 1, [2, 9], 'mc');
-    console.log("teste do board", teste);
     var t = setInterval(function() {
         if ('complete' === document.readyState) {
             clearInterval(t);

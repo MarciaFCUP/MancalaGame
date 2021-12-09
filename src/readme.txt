@@ -38,3 +38,5 @@ nick - nº vitorias - nº jogos que particidou para as mesmas dimensoes do board
 WINNER
 nik que venceu, pode ser null se terminar sem vencedor
 não esquercer de fechar server sent event do jogo
+
+

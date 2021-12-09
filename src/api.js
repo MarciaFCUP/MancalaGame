@@ -5,7 +5,7 @@
 
 //  FETCH COM POST E DADOS EM JSON
 //join players to start a game
-function join(group, nick, psw) {
+async function join(group, nick, psw, size, inicial) {
 
     //jogador em espera->emparelha de imediato, sn fica regsitado p emaprelhamento
     //retorna a mão do jogador
@@ -14,21 +14,25 @@ function join(group, nick, psw) {
     //RESPOSTA
     //game:id / msg de erro : {"game": "fa93b40…" }
     let data = {
-        "group": group,
-        "nick": nick,
-        "password": psw
+        group: group,
+        nick: nick,
+        password: psw,
+        size: size,
+        initial: inicial
+
     }
 
-    const fetchPromise = fetch("http://twserver.alunos.dcc.fc.up.pt:8008/join", {
+    let result = {};
+
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/join", {
             method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            body: JSON.stringify(data)
         })
-        // Converting to JSON
-    fetchPromise.then(response => response.json())
+        .then(response => response.json())
         .then(res => {
-            // Handle response 
-            console.log('Response: ', res.game);
+            result = res;
+            console.log('Response no join: ', result);
+            return result;
         })
         .catch(err => {
             // Handle error 
@@ -38,7 +42,7 @@ function join(group, nick, psw) {
 }
 
 //leave the play not finished
-function leave(nick, psw, game) {
+async function leave(nick, psw, game) {
     //duante o emparelhamento sem consequencia
     //durante o jogo vitoria ao adversário
     //jogadas tem 2minutos, se exceder ->leave automatico
@@ -46,18 +50,24 @@ function leave(nick, psw, game) {
     //RESPOSTA
     //error message
     let data = {
-        "nick": nick,
-        "password": psw,
-        "game": game
+        nick: nick,
+        password: psw,
+        game: game
     }
 
-    fetch("http://twserver.alunos.dcc.fc.up.pt:8008/leave", {
+
+    let result = {};
+
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/leave", {
             method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            body: JSON.stringify(data)
         })
-        // Converting to JSON
-        .then(response => response.json()) //obj resposta {}
+        .then(response => response.json())
+        .then(res => {
+            result = res;
+            console.log('Response no join: ', result);
+            return result;
+        })
         .catch(err => {
             // Handle error 
             console.log('Error message: ', err);
@@ -66,7 +76,7 @@ function leave(nick, psw, game) {
 
 }
 //notify server from a play
-function notify(nick, psw, game, move) {
+async function notify(nick, psw, game, move) {
     //notifica o servidor de uma jogada
     //pedido retornado de imediato
     //move é a cavidade a semear(nº de 0 ate ao N)
@@ -77,22 +87,25 @@ function notify(nick, psw, game, move) {
     //error message-> if no error jogada válida
 
     let data = {
-        "nick": nick,
-        "game": game,
-        "password": psw,
-        "move": move
+        nick: nick,
+        game: game,
+        password: psw,
+        move: move
     }
 
-    fetch("http://twserver.alunos.dcc.fc.up.pt:8008/notify", {
+    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/notify", data);
+
+    let result = {};
+
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/notify", {
             method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            body: JSON.stringify(data)
         })
-        // Converting to JSON
         .then(response => response.json())
         .then(res => {
-            // Handle response 
-            console.log('Response: ', res);
+            result = res;
+            console.log('Response no join: ', result);
+            return result;
         })
         .catch(err => {
             // Handle error 
@@ -100,35 +113,30 @@ function notify(nick, psw, game, move) {
         });
 
 
-
 }
 //returns a classification table
-function ranking() {
+async function ranking() {
     //retorna a table com max de 10players, ordem decrescente
 
     //RESPOSTA
     //error mesg / ranking table (nick, nº vitoris, nº jogos)
     //{ "ranking": [{ "nick": "jpleal", "victories": 2, "games": 2 }, { "nick": "zp", "victories": 0, "games": 2 }] }
+    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/ranking", data);
 
-    fetch("http://twserver.alunos.dcc.fc.up.pt:8008/ranking", {
+
+    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
+    let result = {};
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/ranking", {
             method: "POST",
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            body: '{}'
         })
-        // Converting to JSON
         .then(response => response.json())
         .then(res => {
+            result = res;
             // Handle response 
-            console.log('Response: ', res);
 
-            // Create a variable to store HTML
-            // Loop through each data and add a table row
-            json.forEach(user => {
-                li += '<tr> <td>${user.nick} </td> <td>${user.victories}</td> <td>${user.games}</td></tr>';
-            });
-
-            // Display result
-            document.getElementById("tbody").innerHTML = li;
-
+            console.log('Response no ranking: ', result);
+            return result;
         })
         .catch(err => {
             // Handle error 
@@ -138,7 +146,7 @@ function ranking() {
 
 }
 //regists a user  with a password
-function register(nick, psw) {
+async function register(nickin, psw) {
     //regista plyer e associa lhe psw
     //se ja registado com psw diferente ->erro
     //usada: registo inicial e autenticação no inicio da sessao
@@ -147,20 +155,22 @@ function register(nick, psw) {
     //error message
 
     let data = {
-        "nick": nick,
-        "password": psw
+        nick: nickin,
+        password: psw
     }
 
-    fetch("http://twserver.alunos.dcc.fc.up.pt:8008/register", {
+
+    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
+    let result = {};
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/register", {
             method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            body: JSON.stringify(data)
         })
-        // Converting to JSON
         .then(response => response.json())
         .then(res => {
-            // Handle response 
-            console.log('Response: ', res);
+            result = res;
+            console.log('Response no register: ', result);
+            return result;
         })
         .catch(err => {
             // Handle error 
@@ -169,6 +179,8 @@ function register(nick, psw) {
 
 
 }
+
+
 
 //update point of a game => server sent events com GET e args urlencoded
 function update(nick, game) {
@@ -179,12 +191,21 @@ function update(nick, game) {
 
     //RESPOSTA
     //board / error msg / winner
+    let url = "http://twserver.alunos.dcc.fc.up.pt:8008/update" + "?" + "nick=" + nick + '&' + "game=" + game;
 
-    const eventSource = new EventSource("http://twserver.alunos.dcc.fc.up.pt:8008/update", { withCredentials: true });
+    const eventSource = new EventSource(url);
     eventSource.addEventListener("message", (event) => {
-        // "event.data" is a string
-        const data = JSON.parse(event.data);
 
+        const data = JSON.parse(event.data); // "event.data" is a string
+        if ("error" in message) {
+
+        }
+        if ("board" in message) {
+
+        }
+        if ("winner" in message) {
+
+        }
         // Prints whatever was sent by the server
         console.log(data);
     });
@@ -196,21 +217,67 @@ function update(nick, game) {
     });
 
 
-    var source = new SSE("http://twserver.alunos.dcc.fc.up.pt:8008/update?" + 'nick=' + nick + "&game=" + game, {
-        headers: { 'Content-Type': 'text/plain' },
-        payload: 'Hello, world!',
-        method: 'GET'
-    });
-
-    source.addEventListener("message", (event) => {
-        // "event.data" is a string
-        const data = JSON.parse(event.data);
-
-        // Prints whatever was sent by the server
-        console.log(data);
-    });
 
     //---No final de cada jogo o objecto EventSource deve ser fechado!!!---
     eventSource.close();
 
 }
+
+
+//using xmlhttprequest insted fetch
+function server_request(reqType, request, objTosend) {
+
+    if (!XMLHttpRequest) {
+        return;
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.open(reqType, request, true);
+
+    xhr.onreadystatechange = function() {
+        console.log("status xhr", xhr.status);
+        console.log("response text xhr", xhr.responseText);
+        let res = xhr.responseText;
+        return res;
+
+    }
+    if (objTosend) {
+        xhr.send(JSON.stringify(objTosend));
+
+    } else {
+        console.log("empty send");
+        xhr.send();
+    }
+
+}
+
+//verify answer
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
+function answerValues(Obj) {
+    let resul = Object.values(Obj)
+    console.log(resul); // return an array with values
+    return resul;
+}
+
+
+
+//export module
+let api = {
+    register: register,
+    join: join,
+    leave: leave,
+    ranking: ranking,
+    notify: notify,
+    update: update,
+    isEmpty: isEmpty,
+    answerValues: answerValues
+
+
+}
+
+export {
+    api
+}
+window.api = api;
