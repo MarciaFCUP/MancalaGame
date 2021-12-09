@@ -678,6 +678,7 @@ document.addEventListener('click', function(e) {
         console.log("Classifications yeahhh", e.target.innerText);
 
         var table = document.getElementById("tbody");
+        table.innerHTML = "";
         api.ranking().then(user => {
 
             for (let i = 0; i < 10; i++) {
