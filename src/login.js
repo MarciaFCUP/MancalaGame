@@ -24,6 +24,7 @@ function loginFuntion(event) {
                 document.getElementById('navLogin').style.display = 'none';
                 checkLoginCookie();
                 document.getElementById('id01').style.display = 'none';
+
                 console.log("ok");
             } else {
                 let user = document.getElementById("errLogin");

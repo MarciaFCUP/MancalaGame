@@ -308,8 +308,7 @@ function compareNumSeeds() {
     let nContainers = document.getElementsByClassName("item");
     let seedsP1 = board[nContainers.length];
     let seedsP2 = board[nContainers.length + 1];
-    console.log("seedp1", seedsP1);
-    console.log("seedp2", seedsP2);
+
 
     if (seedsP1 > seedsP2) {
         whoIsWinner = 1;
@@ -324,7 +323,7 @@ function compareNumSeeds() {
     resetGame();
     //CONFIRMAR
     let player = cookie.getCookie('userSession');
-    console.log(player);
+
     saveScore(player.username, seedsP1);
     return false;
 }
@@ -379,10 +378,22 @@ function enableEvents(nContainers, midTarget) {
 
 }
 
+
+
+
 function distributePlayer1RowSeeds(e, limit, startIndex, nContainers) {
     let session = cookie.getCookie('userSession');
+    //to invert positions of board
+    let revBoard = [];
+    let j = 0;
+    console.log("quntos contentores ", nContainers.length);
+    for (let i = (nContainers.length / 2) - 1; i >= 0; i--) {
+        revBoard[j++] = i;
+    }
+
     if (whoIsOpponent == "player") {
-        api.notify(session.username, session.password, handGame, startIndex).then(res => {
+        console.log("joguei na casa:", revBoard[startIndex]);
+        api.notify(session.username, session.password, handGame, revBoard[startIndex]).then(res => {
             console.log("comecei a jogar", res);
             //corret answer is empty obj
             if (api.isEmpty(res)) {
@@ -496,19 +507,28 @@ function distributePlayer2RowSeeds(e, limit, startIndex, nContainers) {
 
 }
 
+//write info during the game
 function writeLog(message) {
     let log = document.getElementById("log");
     log.innerHTML += '<div class="log-item">  <div class="seed log-item"  style=" background:' + getRandomSeedColor() + '"></div>' + message + ' </div>';
 
     log.scrollTop = log.scrollHeight;
 }
-
+//write errors during the game
 function writeLogError(message) {
     let log = document.getElementById("log");
-    log.innerHTML += '<div class="log-item">  <div class="seed log-item"  style=" background:' + "red" + '"></div>' + message + ' </div>';
+    log.innerHTML += '<div class="log-itemErr">  <div class="seed log-item"  style=" background:' + "red" + '"></div>' + message + ' </div>';
 
     log.scrollTop = log.scrollHeight * 2;
 }
+//write who plays next
+function writeLogTurn(message) {
+    let log = document.getElementById("log");
+    log.innerHTML += '<div class="log-itemTurn">  <div class="seed log-item"  style=" background:' + "green" + '"></div>' + message + ' </div>';
+
+    log.scrollTop = log.scrollHeight * 2;
+}
+
 //play against computer
 function playComputer() {
 
@@ -537,8 +557,11 @@ function playAgainstOpponent() {
     api.join(group, session.username, session.password, configs.containers, configs.seeds).then(value => {
         handGame = value.game;
         console.log("hand", handGame);
-
+        api.update(session.username, handGame);
     });
+
+    let el = document.querySelector(".text-player");
+    el.innerHTML += session.username;
 
 
 }
@@ -673,9 +696,8 @@ function addDataToScoreboard(scores) {
 
 //to display ranking
 document.addEventListener('click', function(e) {
-    console.log("target", e.target.innerText);
+
     if (hasClass(e.target, 'tablinks') && e.target.innerText == "Classifications") {
-        console.log("Classifications yeahhh", e.target.innerText);
 
         var table = document.getElementById("tbody");
         table.innerHTML = "";
@@ -712,7 +734,10 @@ let game = {
     SelectFirstPlayer1: SelectFirstPlayer1,
     SelectFirstPlayer2: SelectFirstPlayer2,
     playAgainstComputer: playAgainstComputer,
-    playAgainstOpponent: playAgainstOpponent
+    playAgainstOpponent: playAgainstOpponent,
+    writeLogTurn: writeLogTurn,
+    writeLogError: writeLogError,
+    updateBoard: updateBoard
 
 
 }

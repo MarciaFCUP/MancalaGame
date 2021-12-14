@@ -22,6 +22,7 @@ para cada nick(propriedade) um objeto:
     },
     "turn": "zp"
 }
+{"board":{"turn":"joana","sides":{"ana":{"store":6,"pits":[0,0,1]},"joana":{"store":3,"pits":[7,1,0]}}},"stores":{"ana":6,"joana":3}}
 
 
 ERROR

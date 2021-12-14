@@ -224,3 +224,11 @@ body {
     color: red;
     text-align: -webkit-center;
 }
+
+.log-itemErr {
+    color: crimson;
+}
+
+.log-itemTurn {
+    color: green;
+}
