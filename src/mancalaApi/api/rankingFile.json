@@ -1,0 +1,9 @@
+{
+    "ranking": [{ "nick": "ana", "victories": 91, "games": 133 },
+        { "nick": "ola1", "victories": 90, "games": 164 }, { "nick": "ola", "victories": 79, "games": 169 },
+        { "nick": "rita", "victories": 64, "games": 64 },
+        { "nick": "francisco", "victories": 44, "games": 136 }, { "nick": "tiago", "victories": 39, "games": 84 },
+        { "nick": "rui", "victories": 39, "games": 71 }, { "nick": "ze", "victories": 34, "games": 66 },
+        { "nick": "Some", "victories": 33, "games": 67 }, { "nick": "joana", "victories": 31, "games": 45 }
+    ]
+}

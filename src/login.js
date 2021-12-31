@@ -71,7 +71,7 @@ function setCookie(name, value) {
     var today = new Date();
     var expire = new Date();
     expire.setTime(today.getTime() + 3600000 * 24 * 15);
-    var cookie = name + "=" + JSON.stringify(value) + ";path=/" + ";expires=" + expire.toUTCString();
+    var cookie = name + "=" + JSON.stringify(value) + ";path=/" + ";expires=" + expire.toUTCString() + ";SameSite=Strict; Secure=true";
     document.cookie = cookie;
 }
 

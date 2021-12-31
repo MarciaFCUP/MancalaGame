@@ -1,17 +1,7 @@
 import { game } from "./game.js";
 
-//group:id; game:string; move:nº cavidade
-
-//  FETCH COM POST E DADOS EM JSON
-//join players to start a game
 async function join(group, nick, psw, size, inicial) {
 
-    //jogador em espera->emparelha de imediato, sn fica regsitado p emaprelhamento
-    //retorna a mão do jogador
-    //notificacao do emparelhamento é feita com update
-
-    //RESPOSTA
-    //game:id / msg de erro : {"game": "fa93b40…" }
     let data = {
         group: group,
         nick: nick,
@@ -35,6 +25,7 @@ async function join(group, nick, psw, size, inicial) {
         })
         .catch(err => {
             // Handle error 
+            game.writeLogError(err);
             console.log('Error message: ', err);
         });
 
@@ -115,17 +106,18 @@ async function notify(nick, psw, game, move) {
 }
 //returns a classification table
 async function ranking() {
-    //retorna a table com max de 10players, ordem decrescente
+
 
     //RESPOSTA
     //error mesg / ranking table (nick, nº vitoris, nº jogos)
     //{ "ranking": [{ "nick": "jpleal", "victories": 2, "games": 2 }, { "nick": "zp", "victories": 0, "games": 2 }] }
     //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/ranking", data);
 
-
+    //http://localhost:8115/register
+    //http://twserver.alunos.dcc.fc.up.pt:8008/ranking
     //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
     let result = {};
-    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/ranking", {
+    return fetch("http://localhost:8115/ranking", {
             method: "POST",
             body: '{}'
         })
@@ -154,21 +146,29 @@ async function register(nickin, psw) {
     //error message
 
     let data = {
-        nick: nickin,
-        password: psw
+        "nick": nickin,
+        "password": psw
     }
-
-
+    console.log("data", data);
+    // http://localhost:8115/register
+    //http://twserver.alunos.dcc.fc.up.pt:8008/register
     //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
     let result = {};
-    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/register", {
+
+    return fetch("http://localhost:8115/register", {
             method: "POST",
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(data)
+
         })
         .then(response => response.json())
         .then(res => {
             result = res;
-            console.log('Response no register: ', result);
+            console.log('Response no register: ', res);
+
             return result;
         })
         .catch(err => {
@@ -277,6 +277,9 @@ function update(nick, handgame) {
             console.log("fechou o SSE");
             game.writeLogTurn("winner is " + data.winner);
             eventSource.close();
+            var message = document.getElementById("winning-message"); //.style.visibility = 'visible';
+            message.classList.remove('hide');
+            message.innerHTML += "winner is " + data.winner;
         }
 
     }, false);

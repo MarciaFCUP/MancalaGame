@@ -20,8 +20,8 @@ function showDropOptionsAgainst() {
     document.getElementById("myDropPlayAgainst").classList.toggle("show");
 }
 // Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
+document.addEventListener('click', function(e) {
+    if (!hasClass(e.target, 'dropbtn')) {
         let dropdowns = document.getElementsByClassName("dropdown-content");
         for (let i = 0; i < dropdowns.length; i++) {
             let openDropdown = dropdowns[i];
@@ -30,7 +30,8 @@ window.onclick = function(event) {
             }
         }
     }
-}
+
+}, false);
 
 
 // Global letiables =======================================
@@ -557,7 +558,13 @@ function playAgainstOpponent() {
     api.join(group, session.username, session.password, configs.containers, configs.seeds).then(value => {
         handGame = value.game;
         console.log("hand", handGame);
-        api.update(session.username, handGame);
+        if ("error" in value) {
+            writeLogError(value.error);
+        } else {
+            api.update(session.username, handGame);
+
+        }
+
     });
 
     let el = document.querySelector(".text-player");
