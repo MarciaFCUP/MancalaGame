@@ -19,7 +19,7 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: false,
     cookie: {
-        SameSite: 'true', // THIS is the config you are looing for.
+        SameSite: 'true', // 
         Secure: 'true'
     }
 };
@@ -44,15 +44,15 @@ app.use(cors());
 var routes = require('./src/mancalaApi/api/routes/registerRoutes');
 routes(app);
 app.use('/src', express.static(path.join(__dirname + '/src')));
+
 app.use(function(req, res) {
     res.status(200);
     res.status(401).send("Not authorized");
     res.status(404).send('Sorry, url not found!');
     res.status(500).send('Sorry, something went wrong please try again.');
-
 });
-app.listen(port);
 
-console.log('mancala RESTful API server started on: ' + port);
+app.listen(port);
+console.log('mancala Server started on: ' + port);
 
 //server->routes->controler->model

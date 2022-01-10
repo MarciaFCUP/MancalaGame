@@ -11,7 +11,7 @@ class Register {
         var result = [];
         try {
             for (let i = 0; i < x.length; i++) {
-                console.log("entroo", x[i]);
+                console.log("entrou", x[i]);
                 if (x[i].nick == somename) {
                     result.push(x[i].password);
                     console.log("resultado1", x[i].password);
@@ -19,7 +19,7 @@ class Register {
             }
             return result; //Array containing matched names. Returns empty array if no matches found.
         } catch (error) {
-            console.error("got an error", error.message);
+            console.error({ "error": "got an error" + error.message });
         }
 
     }
@@ -28,10 +28,10 @@ class Register {
     async readFile(filePath) {
             try {
                 const data = await fs.readFile(filePath);
-                console.log("no read", data.toString());
+
                 return JSON.parse(data);
             } catch (error) {
-                console.error(`Got an error trying to read the file: ${error.message}`);
+                console.error({ "error": `Got an error trying to read the file: ${error.message}` });
             }
         }
         //writeFile
@@ -54,7 +54,7 @@ class Register {
                 return verify;
             }
         } catch (error) {
-            console.error(`Got an error trying to write to a file: ${error.message}`);
+            console.error({ "error": `Got an error trying to write to a file: ${error.message}` });
         }
     }
 

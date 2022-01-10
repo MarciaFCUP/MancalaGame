@@ -33,12 +33,8 @@ async function join(group, nick, psw, size, inicial) {
 
 //leave the play not finished
 async function leave(nick, psw, game) {
-    //duante o emparelhamento sem consequencia
-    //durante o jogo vitoria ao adversário
-    //jogadas tem 2minutos, se exceder ->leave automatico
 
-    //RESPOSTA
-    //error message
+
     let data = {
         nick: nick,
         password: psw,
@@ -67,14 +63,7 @@ async function leave(nick, psw, game) {
 }
 //notify server from a play
 async function notify(nick, psw, game, move) {
-    //notifica o servidor de uma jogada
-    //pedido retornado de imediato
-    //move é a cavidade a semear(nº de 0 ate ao N)
-    //reporta erros de args ivalidos ou jogar fora da vez
-    //resultado da jogada propagado c update para os 2 players
 
-    //RESPOSTA
-    //error message-> if no error jogada válida
 
     let data = {
         nick: nick,
@@ -107,17 +96,8 @@ async function notify(nick, psw, game, move) {
 //returns a classification table
 async function ranking() {
 
-
-    //RESPOSTA
-    //error mesg / ranking table (nick, nº vitoris, nº jogos)
-    //{ "ranking": [{ "nick": "jpleal", "victories": 2, "games": 2 }, { "nick": "zp", "victories": 0, "games": 2 }] }
-    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/ranking", data);
-
-    //http://localhost:8115/register
-    //http://twserver.alunos.dcc.fc.up.pt:8008/ranking
-    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
     let result = {};
-    return fetch("http://localhost:8115/ranking", {
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/ranking", {
             method: "POST",
             body: '{}'
         })
@@ -138,24 +118,15 @@ async function ranking() {
 }
 //regists a user  with a password
 async function register(nickin, psw) {
-    //regista plyer e associa lhe psw
-    //se ja registado com psw diferente ->erro
-    //usada: registo inicial e autenticação no inicio da sessao
 
-    //RESPOSTA
-    //error message
 
     let data = {
         "nick": nickin,
         "password": psw
-    }
-    console.log("data", data);
-    // http://localhost:8115/register
-    //http://twserver.alunos.dcc.fc.up.pt:8008/register
-    //server_request('POST', "http://twserver.alunos.dcc.fc.up.pt:8008/register", data);
+    };
     let result = {};
 
-    return fetch("http://localhost:8115/register", {
+    return fetch("http://twserver.alunos.dcc.fc.up.pt:8008/register", {
             method: "POST",
             mode: 'cors',
             headers: {
@@ -184,21 +155,18 @@ async function register(nickin, psw) {
 //update point of a game => server sent events com GET e args urlencoded
 function update(nick, handgame) {
 
-    //enviado em simultaneo para ambos os jogadores
-    //no final de cada jogo o objecto eventSource deve ser fechado
-    //gerado erro no pedido GET se a referencia ao jogo for invalida
 
-    //RESPOSTA
-    //board / error msg / winner
-    let url = "http://twserver.alunos.dcc.fc.up.pt:8008/update" + "?" + "nick=" + nick + '&' + "game=" + handgame;
+    console.log("no server sent event", handgame);
+
+    let url = "http://twserver.alunos.dcc.fc.up.pt:8008/update?nick=" + nick + "&game=" + handgame;
 
     //  {"board":{"turn":"joana","sides":{"ana":{"store":6,"pits":[0,0,1]},"joana":{"store":3,"pits":[7,1,0]}}},"stores":{"ana":6,"joana":3}}
-    // {"board":{"turn":"Ele","sides":{"Ele":{"store":0,"pits":[4,4,3]},"ana":{"store":1,"pits":[3,3,0]}}},"stores":{"ana":1,"Ele":0}}
-    const eventSource = new EventSource(url);
 
+    const eventSource = new EventSource(encodeURI(url));
     eventSource.addEventListener("message", (event) => {
         console.log("mensagem recebida com data:", event.data);
         const data = JSON.parse(event.data); // "event.data" is a string
+        console.log("data nova", data);
         if ("error" in data) {
             console.log("recebi erro no SSE vou fechar");
             eventSource.close();
@@ -295,8 +263,9 @@ function update(nick, handgame) {
         }
         // Prints the information about an error
         console.log("erro no sse:", event);
-        game.writeLogTurn(event.data);
+        game.writeLogTurn("error on server sent event");
         eventSource.close();
+        console.log("Connection was closed. ");
     }, false);
 
 

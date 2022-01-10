@@ -6,13 +6,14 @@ module.exports = function(app) {
     // register Routes
     app.route('/register')
         .post(register.create_a_register, (req, res, next) => {
-            console.log('req', req)
+
+
             if (!req.error) {
                 next();
                 return;
             }
 
-            res.status(401).send('Not authorized');
+            res.status(404).send('unknown');
         });
 
     app.route('/register/:registerId')
